@@ -15,6 +15,7 @@
             --text-muted: #788296;
             --accent-cyan: #00d2ff;
             --accent-gold: #f0b90b;
+            --accent-purple: #a855f7;
             --green: #089981;
             --green-hover: #067a67;
             --red: #f23645;
@@ -22,260 +23,63 @@
             --orange: #d97706;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-primary); display: flex; min-height: 100vh; overflow-x: hidden; }
 
-        body {
-            background-color: var(--bg-main);
-            color: var(--text-primary);
-            display: flex;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+        .sidebar { width: 240px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); padding: 20px 14px; display: flex; flex-direction: column; flex-shrink: 0; }
+        .brand { font-size: 1.3rem; font-weight: 800; color: var(--accent-cyan); letter-spacing: 1.5px; padding: 0 10px 22px 10px; border-bottom: 1px solid var(--border-color); margin-bottom: 16px; }
+        .brand span { display: block; font-size: 0.7rem; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
+        .nav-item { padding: 11px 12px; border-radius: 8px; color: var(--text-muted); font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; }
+        .nav-item.active { background-color: rgba(0, 210, 255, 0.12); color: var(--accent-cyan); border-left: 3px solid var(--accent-cyan); }
 
-        .sidebar {
-            width: 240px;
-            background-color: var(--bg-sidebar);
-            border-right: 1px solid var(--border-color);
-            padding: 20px 14px;
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-        }
+        .token-box { margin-top: auto; background-color: var(--bg-panel); border: 1px solid rgba(240, 185, 11, 0.35); border-radius: 8px; padding: 12px; font-size: 0.76rem; }
+        .token-box strong { color: var(--accent-gold); display: block; margin-bottom: 4px; }
+        .token-box code { display: block; word-break: break-all; color: var(--text-muted); margin-bottom: 8px; }
+        .token-box a { color: var(--accent-gold); text-decoration: none; font-weight: 600; }
 
-        .brand {
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: var(--accent-cyan);
-            letter-spacing: 1.5px;
-            padding: 0 10px 22px 10px;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 16px;
-        }
+        .main-content { flex: 1; display: flex; flex-direction: column; padding: 18px 24px; gap: 16px; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; gap: 10px; }
+        .topbar h1 { font-size: 1.2rem; font-weight: 700; }
 
-        .brand span {
-            display: block;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            margin-top: 2px;
-        }
+        .auth-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .auth-input { background: var(--bg-panel); border: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 10px; border-radius: 6px; font-size: 0.82rem; width: 135px; }
+        .auth-btn { background: rgba(0, 210, 255, 0.15); color: var(--accent-cyan); border: 1px solid rgba(0, 210, 255, 0.4); padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
+        .auth-btn.gold { background: rgba(240, 185, 11, 0.15); color: var(--accent-gold); border-color: rgba(240, 185, 11, 0.45); }
+        .user-pill { background: rgba(8, 153, 129, 0.16); color: var(--green); border: 1px solid rgba(8, 153, 129, 0.4); padding: 5px 11px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
 
-        .nav-item {
-            padding: 11px 12px;
-            border-radius: 8px;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: 6px;
-        }
+        .chart-card, .panel-box { background-color: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 10px; padding: 16px; }
+        .chart-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
+        .pair-selector { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+        .pair-btn { background: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-muted); padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; }
+        .pair-btn.active { border-color: var(--accent-gold); color: var(--accent-gold); background: rgba(240, 185, 11, 0.12); }
 
-        .nav-item.active {
-            background-color: rgba(0, 210, 255, 0.12);
-            color: var(--accent-cyan);
-            border-left: 3px solid var(--accent-cyan);
-        }
+        .live-price-box { text-align: right; }
+        .live-price { font-size: 1.3rem; font-weight: 700; color: var(--green); font-variant-numeric: tabular-nums; }
+        .live-status { font-size: 0.78rem; color: var(--text-muted); }
+        #tvchart { width: 100%; height: 330px; border-radius: 6px; overflow: hidden; }
 
-        .token-box {
-            margin-top: auto;
-            background-color: var(--bg-panel);
-            border: 1px solid rgba(240, 185, 11, 0.35);
-            border-radius: 8px;
-            padding: 12px;
-            font-size: 0.76rem;
-        }
-
-        .token-box strong {
-            color: var(--accent-gold);
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .token-box code {
-            display: block;
-            word-break: break-all;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-        }
-
-        .token-box a {
-            color: var(--accent-gold);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 18px 24px;
-            gap: 16px;
-        }
-
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border-color);
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .topbar h1 {
-            font-size: 1.2rem;
-            font-weight: 700;
-        }
-
-        .badge-demo {
-            background-color: rgba(0, 210, 255, 0.15);
-            color: var(--accent-cyan);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.78rem;
-            font-weight: 600;
-            border: 1px solid rgba(0, 210, 255, 0.3);
-        }
-
-        .chart-card, .panel-box {
-            background-color: var(--bg-panel);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 16px;
-        }
-
-        .chart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .pair-selector {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .pair-btn {
-            background: var(--bg-main);
-            border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 5px 12px;
-            border-radius: 6px;
-            font-size: 0.78rem;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .pair-btn.active {
-            border-color: var(--accent-gold);
-            color: var(--accent-gold);
-            background: rgba(240, 185, 11, 0.12);
-        }
-
-        .live-price-box {
-            text-align: right;
-        }
-
-        .live-price {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--green);
-            font-variant-numeric: tabular-nums;
-        }
-
-        .live-status {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-        }
-
-        #tvchart {
-            width: 100%;
-            height: 360px;
-            border-radius: 6px;
-            overflow: hidden;
-        }
-
-        .controls-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            padding-top: 12px;
-            border-top: 1px solid var(--border-color);
-            margin-top: 10px;
-        }
-
-        .trade-buttons {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .trade-amount {
-            background-color: var(--bg-main);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            padding: 8px 12px;
-            border-radius: 6px;
-            width: 110px;
-            font-size: 0.9rem;
-        }
-
-        .btn {
-            border: none;
-            padding: 9px 18px;
-            border-radius: 6px;
-            font-weight: 700;
-            font-size: 0.85rem;
-            cursor: pointer;
-            color: #fff;
-        }
-
+        .controls-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-top: 12px; border-top: 1px solid var(--border-color); margin-top: 10px; }
+        .trade-buttons { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .trade-amount { background-color: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-primary); padding: 8px 12px; border-radius: 6px; width: 110px; font-size: 0.9rem; }
+        .btn { border: none; padding: 9px 18px; border-radius: 6px; font-weight: 700; font-size: 0.85rem; cursor: pointer; color: #fff; }
         .btn-buy { background-color: var(--green); }
-        .btn-buy:hover { background-color: var(--green-hover); }
         .btn-sell { background-color: var(--red); }
-        .btn-sell:hover { background-color: var(--red-hover); }
         .btn-sl { background-color: var(--orange); }
 
-        .bottom-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
+        .agents-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+        .agent-card { background-color: var(--bg-main); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+        .agent-card.active-agent { border-color: rgba(0, 210, 255, 0.55); }
+        .agent-top { display: flex; justify-content: space-between; align-items: center; }
+        .agent-name { font-weight: 700; font-size: 0.98rem; }
+        .agent-meta { font-size: 0.8rem; color: var(--text-muted); }
+        .agent-signal { font-size: 0.84rem; font-weight: 600; }
 
-        .panel-title {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .ai-toggle { background-color: #1e2533; color: var(--accent-cyan); border: 1px solid var(--accent-cyan); padding: 4px 10px; border-radius: 5px; font-size: 0.75rem; cursor: pointer; font-weight: 600; }
+        .ai-toggle.active { background-color: var(--accent-cyan); color: #0b0e14; }
 
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 7px 0;
-            font-size: 0.9rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-        }
-
+        .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .panel-title { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.6px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .stat-row { display: flex; justify-content: space-between; padding: 7px 0; font-size: 0.9rem; border-bottom: 1px solid rgba(255, 255, 255, 0.03); }
         .stat-row:last-child { border-bottom: none; }
         .stat-label { color: var(--text-muted); }
         .stat-value { font-weight: 600; font-variant-numeric: tabular-nums; }
@@ -284,46 +88,14 @@
         .text-red { color: var(--red); }
         .text-cyan { color: var(--accent-cyan); }
         .text-gold { color: var(--accent-gold); }
+        .text-purple { color: var(--accent-purple); }
 
-        .ai-toggle {
-            background-color: #1e2533;
-            color: var(--accent-cyan);
-            border: 1px solid var(--accent-cyan);
-            padding: 4px 10px;
-            border-radius: 5px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            font-weight: 600;
-        }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border-color); }
+        th { color: var(--text-muted); font-weight: 600; }
 
-        .ai-toggle.active {
-            background-color: var(--accent-cyan);
-            color: #0b0e14;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-        }
-
-        th, td {
-            text-align: left;
-            padding: 9px 10px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        th {
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        @media (max-width: 860px) {
-            body { flex-direction: column; }
-            .sidebar { width: 100%; }
-            .token-box { margin-top: 12px; }
-            .bottom-grid { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 980px) { .agents-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 860px) { body { flex-direction: column; } .sidebar { width: 100%; } .token-box { margin-top: 12px; } .bottom-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -334,7 +106,7 @@
             <span>CAT SYSTEM // AR01</span>
         </div>
         <div class="nav-item active">Dashboard Trading</div>
-        <div class="nav-item">Algoritmos IA</div>
+        <div class="nav-item">B2-IA · Demetra · LIZA</div>
         <div class="nav-item">Historial D1</div>
         <div class="nav-item">Mercados</div>
 
@@ -350,7 +122,12 @@
     <main class="main-content">
         <header class="topbar">
             <h1>CAT - CREAHACHIP AUTOMATED TRADING</h1>
-            <span class="badge-demo">Cloudflare Pages + Worker + D1</span>
+            <div class="auth-bar" id="authBar">
+                <input type="text" id="authUser" class="auth-input" placeholder="Usuario">
+                <input type="password" id="authPass" class="auth-input" placeholder="Contraseña">
+                <button class="auth-btn" onclick="authAction('login')">Entrar</button>
+                <button class="auth-btn gold" onclick="authAction('register')">Crear Cuenta</button>
+            </div>
         </header>
 
         <section class="chart-card">
@@ -367,7 +144,7 @@
                 </div>
                 <div class="live-price-box">
                     <div class="live-price" id="headerPrice">Cargando...</div>
-                    <div class="live-status" id="wsStatus">Conectando con Worker...</div>
+                    <div class="live-status" id="wsStatus">Conectando a red real...</div>
                 </div>
             </div>
 
@@ -375,45 +152,55 @@
 
             <div class="controls-bar">
                 <div style="font-size: 0.85rem; color: #788296;">
-                    Tendencia IA: <strong id="trendVal" class="text-cyan">Analizando...</strong>
+                    Precio Activo: <strong id="panelPrice" class="text-cyan">-- USD</strong> •
+                    Última Ejecución: <strong id="lastExec">--:--:--</strong>
                 </div>
 
                 <div class="trade-buttons">
                     <input type="number" id="orderAmount" class="trade-amount" value="500" min="10" step="10" title="Monto en USD">
-                    <button class="btn btn-buy" onclick="executeTrade('BUY')">COMPRAR</button>
-                    <button class="btn btn-sell" onclick="executeTrade('SELL')">VENDER</button>
+                    <button class="btn btn-buy" onclick="executeTrade('BUY', 'MANUAL')">COMPRAR</button>
+                    <button class="btn btn-sell" onclick="executeTrade('SELL', 'MANUAL')">VENDER</button>
                     <button class="btn btn-sl" onclick="closeAllPositions()">CERRAR TODO</button>
                 </div>
             </div>
         </section>
 
+        <!-- 3 Agentes: B2-IA, Demetra AI y LIZA AI -->
+        <section class="panel-box">
+            <div class="panel-title">
+                <span>Agentes Autónomos (B2-IA · Demetra AI · LIZA AI)</span>
+                <span style="font-size: 0.75rem; color: var(--accent-cyan);">Motor CATS</span>
+            </div>
+            <div class="agents-grid" id="agentsGrid"></div>
+        </section>
+
         <section class="bottom-grid">
             <div class="panel-box">
                 <div class="panel-title">
-                    <span>Control Panel - Algoritmo IA</span>
-                    <button class="ai-toggle" id="aiBotBtn" onclick="toggleAIBot()">IA Autónomo: OFF</button>
+                    <span>Cuenta y Conexión</span>
+                    <span style="font-size: 0.72rem; color: var(--accent-gold);" id="sourceTag">API</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Cuenta Activa:</span>
+                    <span class="stat-value text-cyan" id="activeAccountLabel">AR01-DEMO (Invitado)</span>
                 </div>
                 <div class="stat-row">
                     <span class="stat-label">Activo Seleccionado:</span>
                     <span class="stat-value text-gold" id="panelPair">A1X (BSC)</span>
                 </div>
                 <div class="stat-row">
-                    <span class="stat-label">Precio Actual:</span>
-                    <span class="stat-value" id="panelPrice">-- USD</span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">Última Ejecución:</span>
-                    <span class="stat-value" id="lastExec">--:--:--</span>
+                    <span class="stat-label">Última Sincronización:</span>
+                    <span class="stat-value" id="lastSync">--:--:--</span>
                 </div>
             </div>
 
             <div class="panel-box">
                 <div class="panel-title">
-                    <span>Gestión de Cuenta Demo</span>
+                    <span>Gestión de Balance</span>
                     <span style="font-size: 0.72rem; color: var(--accent-cyan);">DB: D1 CONECTADA</span>
                 </div>
                 <div class="stat-row">
-                    <span class="stat-label">Balance Virtual:</span>
+                    <span class="stat-label">Balance Disponible:</span>
                     <span class="stat-value" id="balanceVal">10,000.00 USD</span>
                 </div>
                 <div class="stat-row">
@@ -437,6 +224,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Activo</th>
+                        <th>Agente</th>
                         <th>Tipo</th>
                         <th>Monto (USD)</th>
                         <th>Precio Entrada</th>
@@ -445,7 +233,7 @@
                 </thead>
                 <tbody id="historyBody">
                     <tr>
-                        <td colspan="6" style="color: #788296;">Cargando historial desde D1...</td>
+                        <td colspan="7" style="color: #788296;">Cargando historial desde D1...</td>
                     </tr>
                 </tbody>
             </table>
@@ -458,11 +246,45 @@
 
         const PAIR_META = {
             A1X: { label: "A1X (BSC)", title: "A1X / USD - BNB Smart Chain (BSC)", sub: "Contrato: 0x1ad4eea4661d20e16c992237ea0c30a2a06fe045" },
-            BTC: { label: "BTC / USD", title: "BTC / USD - 1 Minute Interval", sub: "Mercado Cripto vía puente Cloudflare Worker" },
-            ETH: { label: "ETH / USD", title: "ETH / USD - 1 Minute Interval", sub: "Mercado Cripto vía puente Cloudflare Worker" },
-            BNB: { label: "BNB / USD", title: "BNB / USD - 1 Minute Interval", sub: "Mercado Cripto vía puente Cloudflare Worker" },
+            BTC: { label: "BTC / USD", title: "BTC / USD - Mercado Real", sub: "Cotización real vía puente Cloudflare Worker" },
+            ETH: { label: "ETH / USD", title: "ETH / USD - Mercado Real", sub: "Cotización real vía puente Cloudflare Worker" },
+            BNB: { label: "BNB / USD", title: "BNB / USD - Mercado Real", sub: "Cotización real vía puente Cloudflare Worker" },
         };
 
+        const AGENTS = [
+            {
+                id: "B2-IA",
+                name: "B2-IA",
+                role: "Ejecución Dinámica",
+                targetPair: "A1X",
+                sizeUsd: 250,
+                active: false,
+                signal: "En espera",
+                color: "text-cyan",
+            },
+            {
+                id: "Demetra AI",
+                name: "Demetra AI",
+                role: "Crecimiento y Tendencia",
+                targetPair: "BTC",
+                sizeUsd: 200,
+                active: false,
+                signal: "En espera",
+                color: "text-gold",
+            },
+            {
+                id: "LIZA AI",
+                name: "LIZA AI",
+                role: "Precisión y Control",
+                targetPair: "ETH",
+                sizeUsd: 150,
+                active: false,
+                signal: "En espera",
+                color: "text-purple",
+            },
+        ];
+
+        let currentUser = localStorage.getItem("cats_user") || "AR01-DEMO";
         let activePair = "A1X";
         let activePairLabel = PAIR_META.A1X.label;
         let lastCandle = null;
@@ -470,8 +292,63 @@
         let prevPrice = 0;
         let balance = 10000.00;
         let openPositions = [];
-        let aiBotActive = false;
         let chart, candleSeries;
+
+        function renderAuthUI() {
+            const bar = document.getElementById("authBar");
+            if (currentUser && currentUser !== "AR01-DEMO") {
+                bar.innerHTML = `
+                    <span class="user-pill">● ${currentUser}</span>
+                    <button class="auth-btn" onclick="logoutUser()">Salir</button>
+                `;
+                document.getElementById("activeAccountLabel").textContent = currentUser;
+            } else {
+                bar.innerHTML = `
+                    <input type="text" id="authUser" class="auth-input" placeholder="Usuario">
+                    <input type="password" id="authPass" class="auth-input" placeholder="Contraseña">
+                    <button class="auth-btn" onclick="authAction('login')">Entrar</button>
+                    <button class="auth-btn gold" onclick="authAction('register')">Crear Cuenta</button>
+                `;
+                document.getElementById("activeAccountLabel").textContent = "AR01-DEMO (Invitado)";
+            }
+        }
+
+        async function authAction(mode) {
+            const u = document.getElementById("authUser")?.value.trim().toLowerCase();
+            const p = document.getElementById("authPass")?.value || "";
+            if (!u || !p) {
+                alert("Completa usuario y contraseña.");
+                return;
+            }
+            try {
+                const res = await fetch(`${WORKER_URL}/api/${mode}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ usuario: u, password: p }),
+                });
+                const data = await res.json();
+                if (!data.ok) {
+                    alert(data.error || "No se pudo completar la acción.");
+                    return;
+                }
+                currentUser = u;
+                localStorage.setItem("cats_user", currentUser);
+                openPositions = [];
+                renderAuthUI();
+                await loadHistoryFromD1();
+                alert(mode === "register" ? `Cuenta '${u}' creada. ¡Ya puedes operar!` : `Bienvenido, ${u}.`);
+            } catch {
+                alert("Error de conexión con el Worker.");
+            }
+        }
+
+        function logoutUser() {
+            currentUser = "AR01-DEMO";
+            localStorage.removeItem("cats_user");
+            openPositions = [];
+            renderAuthUI();
+            loadHistoryFromD1();
+        }
 
         if (typeof LightweightCharts !== "undefined") {
             const container = document.getElementById("tvchart");
@@ -497,7 +374,49 @@
             });
         } else {
             document.getElementById("tvchart").innerHTML =
-                "<p style='padding:20px;color:#f23645;'>No cargó la librería de gráficos en tu red; el panel numérico sigue activo.</p>";
+                "<p style='padding:20px;color:#f23645;'>No cargó la librería de gráficos en tu red; el panel numérico y los 3 agentes siguen activos.</p>";
+        }
+
+        function renderAgents() {
+            const grid = document.getElementById("agentsGrid");
+            grid.innerHTML = AGENTS.map((ag, idx) => `
+                <div class="agent-card ${ag.active ? "active-agent" : ""}">
+                    <div class="agent-top">
+                        <span class="agent-name ${ag.color}">${ag.name}</span>
+                        <button class="ai-toggle ${ag.active ? "active" : ""}" onclick="toggleAgent(${idx})">
+                            ${ag.active ? "ON" : "OFF"}
+                        </button>
+                    </div>
+                    <div class="agent-meta">Rol: <strong>${ag.role}</strong> · Par: <strong>${ag.targetPair}</strong> · Monto: <strong>$${ag.sizeUsd}</strong></div>
+                    <div class="agent-signal">Señal: <span>${ag.signal}</span></div>
+                </div>
+            `).join("");
+        }
+
+        function toggleAgent(index) {
+            AGENTS[index].active = !AGENTS[index].active;
+            AGENTS[index].signal = AGENTS[index].active ? "Analizando mercado..." : "Pausado";
+            renderAgents();
+            if (AGENTS[index].active && lastCandle) {
+                evaluateAgents(lastCandle);
+            }
+        }
+
+        function evaluateAgents(candle) {
+            const bullish = candle.close >= candle.open;
+            AGENTS.forEach((ag) => {
+                if (!ag.active) return;
+                if (ag.targetPair !== activePair) {
+                    ag.signal = `Esperando ${ag.targetPair} (actual: ${activePair})`;
+                    return;
+                }
+                const action = bullish ? "BUY" : "SELL";
+                ag.signal = `${action} (${bullish ? "Alcista" : "Bajista"})`;
+                if (openPositions.length < 3 && balance >= ag.sizeUsd) {
+                    executeTrade(action, ag.id, ag.sizeUsd);
+                }
+            });
+            renderAgents();
         }
 
         function selectPair(pair) {
@@ -522,24 +441,6 @@
             return val.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
         }
 
-        function applyPriceTick(newPrice, candleObj) {
-            prevPrice = currentPrice || newPrice;
-            currentPrice = newPrice;
-
-            const formatted = formatPrice(currentPrice);
-            const headerEl = document.getElementById("headerPrice");
-            headerEl.textContent = `${formatted} USD`;
-            headerEl.style.color = currentPrice >= prevPrice ? "#089981" : "#f23645";
-            document.getElementById("panelPrice").textContent = `${formatted} USD`;
-
-            if (candleSeries && candleObj) {
-                candleSeries.update(candleObj);
-            }
-
-            updateFloatingPnL();
-            if (candleObj) evaluateAI(candleObj);
-        }
-
         async function fetchMarketFromWorker() {
             try {
                 const res = await fetch(`${WORKER_URL}/api/candles?pair=${encodeURIComponent(activePair)}`);
@@ -549,14 +450,26 @@
                 }
 
                 if (data.pair) activePairLabel = data.pair;
+                if (data.source) document.getElementById("sourceTag").textContent = data.source.toUpperCase();
                 if (candleSeries) candleSeries.setData(data.candles);
 
                 lastCandle = { ...data.candles[data.candles.length - 1] };
-                applyPriceTick(lastCandle.close, lastCandle);
+                prevPrice = currentPrice || lastCandle.open;
+                currentPrice = lastCandle.close;
+
+                const formatted = formatPrice(currentPrice);
+                const headerEl = document.getElementById("headerPrice");
+                headerEl.textContent = `${formatted} USD`;
+                headerEl.style.color = currentPrice >= prevPrice ? "#089981" : "#f23645";
+                document.getElementById("panelPrice").textContent = `${formatted} USD`;
 
                 const statusEl = document.getElementById("wsStatus");
-                statusEl.textContent = `● Activo (${activePairLabel})`;
+                statusEl.textContent = `● Conectado (${activePairLabel})`;
                 statusEl.style.color = "#089981";
+                document.getElementById("lastSync").textContent = new Date().toLocaleTimeString();
+
+                updateFloatingPnL();
+                evaluateAgents(lastCandle);
             } catch {
                 const statusEl = document.getElementById("wsStatus");
                 statusEl.textContent = "Revisa WORKER_URL o conexión";
@@ -564,31 +477,17 @@
             }
         }
 
-        // Movimiento continuo entre consultas al Worker para evitar pantalla estática
-        function liveTickLoop() {
-            if (!lastCandle || currentPrice <= 0) return;
-            const jitter = (Math.random() - 0.495) * 0.0018;
-            const nextClose = Math.max(0.000001, Number((currentPrice * (1 + jitter)).toFixed(6)));
-            lastCandle = {
-                ...lastCandle,
-                close: nextClose,
-                high: Math.max(lastCandle.high, nextClose),
-                low: Math.min(lastCandle.low, nextClose),
-            };
-            applyPriceTick(nextClose, lastCandle);
-        }
-
-        async function executeTrade(type) {
+        async function executeTrade(type, agentSource = "MANUAL", customAmount = null) {
             if (currentPrice <= 0) return;
-            const amount = parseFloat(document.getElementById("orderAmount").value);
+            const amount = customAmount ?? parseFloat(document.getElementById("orderAmount").value);
             if (isNaN(amount) || amount <= 0 || amount > balance) {
-                alert("Monto inválido o balance demo insuficiente.");
+                if (agentSource === "MANUAL") alert("Monto inválido o balance insuficiente.");
                 return;
             }
 
             balance -= amount;
-            openPositions.push({ pair: activePairLabel, type, entryPrice: currentPrice, amount });
-            document.getElementById("lastExec").textContent = `${new Date().toLocaleTimeString()} (${activePair} ${type})`;
+            openPositions.push({ pair: activePairLabel, type, entryPrice: currentPrice, amount, agent: agentSource });
+            document.getElementById("lastExec").textContent = `${new Date().toLocaleTimeString()} · ${agentSource} (${type})`;
             updateAccountUI();
 
             try {
@@ -596,8 +495,10 @@
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
+                        usuario: currentUser,
                         type,
                         par: activePairLabel,
+                        agente: agentSource,
                         amount,
                         price: currentPrice,
                     }),
@@ -610,17 +511,17 @@
 
         async function loadHistoryFromD1() {
             try {
-                const res = await fetch(`${WORKER_URL}/api/history`);
+                const res = await fetch(`${WORKER_URL}/api/history?usuario=${encodeURIComponent(currentUser)}`);
                 const data = await res.json();
-                if (data?.account && typeof data.account.balance === "number") {
+                if (typeof data?.balance === "number") {
                     const locked = openPositions.reduce((acc, p) => acc + p.amount, 0);
-                    balance = Math.max(0, Number((data.account.balance - locked).toFixed(2)));
+                    balance = Math.max(0, Number((data.balance - locked).toFixed(2)));
                     updateAccountUI();
                 }
 
                 const tbody = document.getElementById("historyBody");
                 if (!data.ok || !data.rows || data.rows.length === 0) {
-                    tbody.innerHTML = "<tr><td colspan='6' style='color:#788296;'>Sin operaciones registradas en D1 aún.</td></tr>";
+                    tbody.innerHTML = "<tr><td colspan='7' style='color:#788296;'>Sin operaciones registradas en D1 para esta cuenta.</td></tr>";
                     return;
                 }
 
@@ -628,15 +529,14 @@
                     <tr>
                         <td>#${r.id}</td>
                         <td class="text-gold"><strong>${r.par || "A1X (BSC)"}</strong></td>
+                        <td class="text-cyan"><strong>${r.agente || "MANUAL"}</strong></td>
                         <td class="${r.tipo === "BUY" ? "text-green" : "text-red"}"><strong>${r.tipo}</strong></td>
                         <td>$${Number(r.monto).toFixed(2)}</td>
                         <td>$${formatPrice(Number(r.precio_entrada))}</td>
                         <td>${new Date(r.fecha).toLocaleString()}</td>
                     </tr>
                 `).join("");
-            } catch {
-                // Silencioso hasta configurar WORKER_URL
-            }
+            } catch {}
         }
 
         function closeAllPositions() {
@@ -673,29 +573,11 @@
             document.getElementById("openOrdersVal").textContent = openPositions.length;
         }
 
-        function toggleAIBot() {
-            aiBotActive = !aiBotActive;
-            const btn = document.getElementById("aiBotBtn");
-            btn.textContent = aiBotActive ? "IA Autónomo: ON" : "IA Autónomo: OFF";
-            btn.classList.toggle("active", aiBotActive);
-        }
-
-        function evaluateAI(candle) {
-            const bullish = candle.close >= candle.open;
-            const trendEl = document.getElementById("trendVal");
-            trendEl.textContent = bullish ? "Alcista (Bullish)" : "Bajista (Bearish)";
-            trendEl.style.color = bullish ? "#089981" : "#f23645";
-
-            if (aiBotActive && openPositions.length === 0 && balance >= 200) {
-                document.getElementById("orderAmount").value = 200;
-                executeTrade(bullish ? "BUY" : "SELL");
-            }
-        }
-
+        renderAuthUI();
+        renderAgents();
         fetchMarketFromWorker();
         loadHistoryFromD1();
         setInterval(fetchMarketFromWorker, 6000);
-        setInterval(liveTickLoop, 2000);
     </script>
 </body>
 </html>
