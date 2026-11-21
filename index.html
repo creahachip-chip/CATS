@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAT - Creahachip Automated Trading System</title>
+    <title>Bolsa AR01 · Nación Creahachip — CATS</title>
     <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.1/dist/lightweight-charts.standalone.production.js"></script>
     <style>
         :root {
@@ -26,9 +26,9 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { background-color: var(--bg-main); color: var(--text-primary); display: flex; min-height: 100vh; overflow-x: hidden; }
 
-        .sidebar { width: 245px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); padding: 20px 14px; display: flex; flex-direction: column; flex-shrink: 0; }
-        .brand { font-size: 1.3rem; font-weight: 800; color: var(--accent-cyan); letter-spacing: 1.5px; padding: 0 10px 22px 10px; border-bottom: 1px solid var(--border-color); margin-bottom: 16px; }
-        .brand span { display: block; font-size: 0.7rem; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
+        .sidebar { width: 248px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); padding: 20px 14px; display: flex; flex-direction: column; flex-shrink: 0; }
+        .brand { font-size: 1.25rem; font-weight: 800; color: var(--accent-cyan); letter-spacing: 1.2px; padding: 0 10px 20px 10px; border-bottom: 1px solid var(--border-color); margin-bottom: 16px; }
+        .brand span { display: block; font-size: 0.7rem; color: var(--text-muted); font-weight: 500; margin-top: 3px; }
         .nav-item { padding: 11px 12px; border-radius: 8px; color: var(--text-muted); font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; }
         .nav-item.active { background-color: rgba(0, 210, 255, 0.12); color: var(--accent-cyan); border-left: 3px solid var(--accent-cyan); }
 
@@ -39,10 +39,11 @@
 
         .main-content { flex: 1; display: flex; flex-direction: column; padding: 18px 24px; gap: 16px; }
         .topbar { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; gap: 10px; }
-        .topbar h1 { font-size: 1.2rem; font-weight: 700; }
+        .topbar h1 { font-size: 1.18rem; font-weight: 800; letter-spacing: 0.4px; }
+        .topbar p { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
 
         .auth-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-        .auth-input { background: var(--bg-panel); border: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 10px; border-radius: 6px; font-size: 0.82rem; width: 135px; }
+        .auth-input { background: var(--bg-panel); border: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 10px; border-radius: 6px; font-size: 0.82rem; width: 132px; }
         .auth-btn { background: rgba(0, 210, 255, 0.15); color: var(--accent-cyan); border: 1px solid rgba(0, 210, 255, 0.4); padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
         .auth-btn.gold { background: rgba(240, 185, 11, 0.15); color: var(--accent-gold); border-color: rgba(240, 185, 11, 0.45); }
         .user-pill { background: rgba(8, 153, 129, 0.16); color: var(--green); border: 1px solid rgba(8, 153, 129, 0.4); padding: 5px 11px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; }
@@ -56,14 +57,17 @@
         .live-price-box { text-align: right; }
         .live-price { font-size: 1.3rem; font-weight: 700; color: var(--green); font-variant-numeric: tabular-nums; }
         .live-status { font-size: 0.78rem; color: var(--text-muted); }
-        #tvchart { width: 100%; height: 330px; border-radius: 6px; overflow: hidden; }
+        #tvchart { width: 100%; height: 325px; border-radius: 6px; overflow: hidden; }
 
         .controls-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding-top: 12px; border-top: 1px solid var(--border-color); margin-top: 10px; }
         .trade-buttons { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         .trade-amount { background-color: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-primary); padding: 8px 12px; border-radius: 6px; width: 110px; font-size: 0.9rem; }
-        .btn { border: none; padding: 9px 18px; border-radius: 6px; font-weight: 700; font-size: 0.85rem; cursor: pointer; color: #fff; }
+        .est-badge { font-size: 0.82rem; font-weight: 700; color: var(--accent-gold); background: rgba(240, 185, 11, 0.1); padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(240, 185, 11, 0.25); }
+        .btn { border: none; padding: 9px 16px; border-radius: 6px; font-weight: 700; font-size: 0.84rem; cursor: pointer; color: #fff; }
         .btn-buy { background-color: var(--green); }
+        .btn-buy:hover { background-color: var(--green-hover); }
         .btn-sell { background-color: var(--red); }
+        .btn-sell:hover { background-color: var(--red-hover); }
         .btn-sl { background-color: var(--orange); }
 
         .agents-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
@@ -90,7 +94,7 @@
         .text-gold { color: var(--accent-gold); }
         .text-purple { color: var(--accent-purple); }
 
-        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
         th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border-color); }
         th { color: var(--text-muted); font-weight: 600; }
 
@@ -102,10 +106,10 @@
 
     <aside class="sidebar">
         <div class="brand">
-            CREAHACHIP
-            <span>CAT SYSTEM // AR01</span>
+            NACIÓN CREAHACHIP
+            <span>BOLSA AR01 · CATS ENGINE</span>
         </div>
-        <div class="nav-item active">Dashboard On-Chain</div>
+        <div class="nav-item active">Bolsa de Valores AR01</div>
         <div class="nav-item">B2-IA · Demetra · LIZA</div>
         <div class="nav-item">Historial D1</div>
         <div class="nav-item">Pool BSC</div>
@@ -124,7 +128,10 @@
 
     <main class="main-content">
         <header class="topbar">
-            <h1>CAT - CREAHACHIP AUTOMATED TRADING</h1>
+            <div>
+                <h1>BOLSA DE VALORES AR01 · NACIÓN CREAHACHIP</h1>
+                <p>Mercado Oficial A1X (BSC) · Agentes Autónomos y Persistencia en Cloudflare D1</p>
+            </div>
             <div class="auth-bar" id="authBar">
                 <input type="text" id="authUser" class="auth-input" placeholder="Usuario">
                 <input type="password" id="authPass" class="auth-input" placeholder="Contraseña">
@@ -136,10 +143,10 @@
         <section class="chart-card">
             <div class="chart-header">
                 <div class="pair-info">
-                    <h2 id="pairTitle">A1X / USD - Pool PancakeSwap BSC (On-Chain)</h2>
-                    <p id="pairSubtitle">Pool: 0x1834762b209fF4fB9c944461895e136fE152a2e8</p>
+                    <h2 id="pairTitle">A1X / USD - Bolsa AR01 (Pool BSC On-Chain)</h2>
+                    <p id="pairSubtitle">Pool: 0x1834762b209fF4fB9c944461895e136fE152a2e8 · Contrato A1X: 0x1ad4eea4661d20e16c992237ea0c30a2a06fe045</p>
                     <div class="pair-selector">
-                        <button class="pair-btn active" id="btnA1X" onclick="selectPair('A1X')">A1X (BSC Pool)</button>
+                        <button class="pair-btn active" id="btnA1X" onclick="selectPair('A1X')">A1X (Bolsa AR01)</button>
                         <button class="pair-btn" id="btnBTC" onclick="selectPair('BTC')">BTC / USD</button>
                         <button class="pair-btn" id="btnETH" onclick="selectPair('ETH')">ETH / USD</button>
                         <button class="pair-btn" id="btnBNB" onclick="selectPair('BNB')">BNB / USD</button>
@@ -155,24 +162,24 @@
 
             <div class="controls-bar">
                 <div style="font-size: 0.85rem; color: #788296;">
-                    Precio On-Chain: <strong id="panelPrice" class="text-cyan">--</strong> •
+                    Precio Actual: <strong id="panelPrice" class="text-cyan">--</strong> •
                     Bloque BSC: <strong id="bscBlock" class="text-gold">--</strong>
                 </div>
 
                 <div class="trade-buttons">
-                    <input type="number" id="orderAmount" class="trade-amount" value="500" min="10" step="10" title="Monto en USD">
-                    <button class="btn btn-buy" onclick="executeTrade('BUY', 'MANUAL')">COMPRAR</button>
+                    <input type="number" id="orderAmount" class="trade-amount" value="500" min="10" step="10" title="Monto en USD" oninput="updateEstimatedA1x()">
+                    <span class="est-badge" id="estA1xLabel">≈ -- A1X</span>
+                    <button class="btn btn-buy" onclick="executeTrade('BUY', 'MANUAL')">COMPRAR A1X</button>
                     <button class="btn btn-sell" onclick="executeTrade('SELL', 'MANUAL')">VENDER</button>
                     <button class="btn btn-sl" onclick="closeAllPositions()">CERRAR TODO</button>
                 </div>
             </div>
         </section>
 
-        <!-- 3 Agentes: B2-IA, Demetra AI y LIZA AI -->
         <section class="panel-box">
             <div class="panel-title">
                 <span>Agentes Autónomos (B2-IA · Demetra AI · LIZA AI)</span>
-                <span style="font-size: 0.75rem; color: var(--accent-cyan);">Motor CATS On-Chain</span>
+                <span style="font-size: 0.75rem; color: var(--accent-cyan);">Bolsa AR01</span>
             </div>
             <div class="agents-grid" id="agentsGrid"></div>
         </section>
@@ -180,11 +187,11 @@
         <section class="bottom-grid">
             <div class="panel-box">
                 <div class="panel-title">
-                    <span>Telemetría Real de Red</span>
+                    <span>Cuenta y Telemetría de Red</span>
                     <span style="font-size: 0.72rem; color: var(--accent-gold);" id="sourceTag">BSC RPC</span>
                 </div>
                 <div class="stat-row">
-                    <span class="stat-label">Cuenta Activa:</span>
+                    <span class="stat-label">Inversionista / Cuenta:</span>
                     <span class="stat-value text-cyan" id="activeAccountLabel">AR01-DEMO (Invitado)</span>
                 </div>
                 <div class="stat-row">
@@ -199,7 +206,7 @@
 
             <div class="panel-box">
                 <div class="panel-title">
-                    <span>Gestión de Balance</span>
+                    <span>Cartera en Bolsa AR01</span>
                     <span style="font-size: 0.72rem; color: var(--accent-cyan);">DB: D1 CONECTADA</span>
                 </div>
                 <div class="stat-row">
@@ -219,7 +226,7 @@
 
         <section class="panel-box">
             <div class="panel-title">
-                <span>Registro de Órdenes (Cloudflare D1)</span>
+                <span>Registro de Órdenes Bolsa AR01 (Cloudflare D1)</span>
                 <button class="ai-toggle" onclick="loadHistoryFromD1()">Actualizar D1</button>
             </div>
             <table>
@@ -230,13 +237,14 @@
                         <th>Agente</th>
                         <th>Tipo</th>
                         <th>Monto (USD)</th>
+                        <th>Cant. A1X</th>
                         <th>Precio Entrada</th>
                         <th>Fecha</th>
                     </tr>
                 </thead>
                 <tbody id="historyBody">
                     <tr>
-                        <td colspan="7" style="color: #788296;">Cargando historial desde D1...</td>
+                        <td colspan="8" style="color: #788296;">Cargando historial desde D1...</td>
                     </tr>
                 </tbody>
             </table>
@@ -248,10 +256,10 @@
         const WORKER_URL = "https://cats-worker.TU-SUBDOMINIO.workers.dev";
 
         const PAIR_META = {
-            A1X: { label: "A1X / USD (BSC)", title: "A1X / USD - Pool PancakeSwap BSC (On-Chain)", sub: "Pool: 0x1834762b209fF4fB9c944461895e136fE152a2e8" },
-            BTC: { label: "BTC / USD", title: "BTC / USD - Mercado Real", sub: "Cotización real Coinbase Spot vía Cloudflare Worker" },
-            ETH: { label: "ETH / USD", title: "ETH / USD - Mercado Real", sub: "Cotización real Coinbase Spot vía Cloudflare Worker" },
-            BNB: { label: "BNB / USD", title: "BNB / USD - Mercado Real", sub: "Cotización real Coinbase Spot vía Cloudflare Worker" },
+            A1X: { label: "A1X / USD (BSC)", title: "A1X / USD - Bolsa AR01 (Pool BSC On-Chain)", sub: "Pool: 0x1834762b209fF4fB9c944461895e136fE152a2e8 · Contrato A1X: 0x1ad4eea4661d20e16c992237ea0c30a2a06fe045" },
+            BTC: { label: "BTC / USD", title: "BTC / USD - Bolsa AR01", sub: "Cotización real Coinbase Spot vía Cloudflare Worker" },
+            ETH: { label: "ETH / USD", title: "ETH / USD - Bolsa AR01", sub: "Cotización real Coinbase Spot vía Cloudflare Worker" },
+            BNB: { label: "BNB / USD", title: "BNB / USD - Bolsa AR01", sub: "Cotización real Coinbase Spot vía Cloudflare Worker" },
         };
 
         const AGENTS = [
@@ -339,7 +347,7 @@
                 openPositions = [];
                 renderAuthUI();
                 await loadHistoryFromD1();
-                alert(mode === "register" ? `Cuenta '${u}' creada. ¡Ya puedes operar!` : `Bienvenido, ${u}.`);
+                alert(mode === "register" ? `Cuenta '${u}' creada en la Bolsa AR01.` : `Bienvenido a la Bolsa AR01, ${u}.`);
             } catch {
                 alert("Error de conexión con el Worker.");
             }
@@ -432,6 +440,7 @@
             document.getElementById("pairSubtitle").textContent = meta.sub;
             currentPrice = 0;
             lastCandle = null;
+            updateEstimatedA1x();
             fetchMarketFromWorker();
         }
 
@@ -439,6 +448,18 @@
             if (!Number.isFinite(val)) return "--";
             const decimals = val < 0.01 ? 8 : val < 1 ? 6 : 2;
             return val.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+        }
+
+        function updateEstimatedA1x() {
+            const amt = parseFloat(document.getElementById("orderAmount")?.value || 0);
+            const label = document.getElementById("estA1xLabel");
+            if (!label) return;
+            if (currentPrice > 0 && amt > 0) {
+                const qty = amt / currentPrice;
+                label.textContent = `≈ ${qty.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 4 })} A1X`;
+            } else {
+                label.textContent = "≈ -- A1X";
+            }
         }
 
         async function fetchMarketFromWorker() {
@@ -477,6 +498,7 @@
                 statusEl.style.color = "#089981";
                 document.getElementById("lastSync").textContent = new Date().toLocaleTimeString();
 
+                updateEstimatedA1x();
                 updateFloatingPnL();
                 evaluateAgents(lastCandle);
             } catch (err) {
@@ -529,7 +551,7 @@
 
                 const tbody = document.getElementById("historyBody");
                 if (!data.ok || !data.rows || data.rows.length === 0) {
-                    tbody.innerHTML = "<tr><td colspan='7' style='color:#788296;'>Sin operaciones registradas en D1 para esta cuenta.</td></tr>";
+                    tbody.innerHTML = "<tr><td colspan='8' style='color:#788296;'>Sin operaciones registradas en D1 para esta cuenta.</td></tr>";
                     return;
                 }
 
@@ -540,6 +562,7 @@
                         <td class="text-cyan"><strong>${r.agente || "MANUAL"}</strong></td>
                         <td class="${r.tipo === "BUY" ? "text-green" : "text-red"}"><strong>${r.tipo}</strong></td>
                         <td>$${Number(r.monto).toFixed(2)}</td>
+                        <td class="text-gold"><strong>${Number(r.cantidad_a1x || 0).toFixed(4)}</strong></td>
                         <td>${formatPrice(Number(r.precio_entrada))}</td>
                         <td>${new Date(r.fecha).toLocaleString()}</td>
                     </tr>
