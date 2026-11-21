@@ -344,4 +344,271 @@
 
                 <div class="trade-buttons">
                     <input type="number" id="orderAmount" class="trade-amount" value="500" min="10" step="10" title="Monto en USD">
-                    <button class="btn btn-buy" onclick="execute
+                    <button class="btn btn-buy" onclick="executeTrade('BUY')">COMPRAR</button>
+                    <button class="btn btn-sell" onclick="executeTrade('SELL')">VENDER</button>
+                    <button class="btn btn-sl" onclick="closeAllPositions()">CERRAR TODO</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="bottom-grid">
+            <div class="panel-box">
+                <div class="panel-title">
+                    <span>Control Panel - Algoritmo IA</span>
+                    <button class="ai-toggle" id="aiBotBtn" onclick="toggleAIBot()">IA Autónomo: OFF</button>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Precio Actual:</span>
+                    <span class="stat-value" id="panelPrice">-- USD</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Estado IA:</span>
+                    <span class="stat-value text-green" id="aiSignal">En espera</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Última Ejecución:</span>
+                    <span class="stat-value" id="lastExec">--:--:--</span>
+                </div>
+            </div>
+
+            <div class="panel-box">
+                <div class="panel-title">
+                    <span>Gestión de Cuenta Demo</span>
+                    <span style="font-size: 0.72rem; color: var(--accent-cyan);">DB: D1 CONECTADA</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Balance Virtual:</span>
+                    <span class="stat-value" id="balanceVal">10,000.00 USD</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">PnL Flotante (Ganancia/Pérdida):</span>
+                    <span class="stat-value text-green" id="pnlVal">+0.00 USD (0.00%)</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Operaciones Abiertas:</span>
+                    <span class="stat-value" id="openOrdersVal">0</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Registro de Operaciones D1 -->
+        <section class="panel-box">
+            <div class="panel-title">
+                <span>Registro de Órdenes (Cloudflare D1)</span>
+                <button class="ai-toggle" onclick="loadHistoryFromD1()">Actualizar D1</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tipo</th>
+                        <th>Monto (USD)</th>
+                        <th>Precio Entrada</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody id="historyBody">
+                    <tr>
+                        <td colspan="5" style="color: #788296;">Cargando historial desde D1...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script>
+        // REEMPLAZA ESTA URL POR LA DE TU WORKER (sin barra al final)
+        const WORKER_URL = "https://cats-worker.TU-SUBDOMINIO.workers.dev";
+
+        let currentPrice = 0;
+        let prevPrice = 0;
+        let balance = 10000.00;
+        let openPositions = [];
+        let aiBotActive = false;
+        let chart, candleSeries;
+
+        // Inicializar gráfico Lightweight Charts
+        if (typeof LightweightCharts !== "undefined") {
+            const container = document.getElementById("tvchart");
+            chart = LightweightCharts.createChart(container, {
+                layout: {
+                    background: { color: "#131722" },
+                    textColor: "#9aa4b8",
+                },
+                grid: {
+                    vertLines: { color: "#1e2433" },
+                    horzLines: { color: "#1e2433" },
+                },
+                crosshair: {
+                    mode: LightweightCharts.CrosshairMode.Normal,
+                },
+                timeScale: {
+                    borderColor: "#232936",
+                    timeVisible: true,
+                    secondsVisible: false,
+                },
+                rightPriceScale: {
+                    borderColor: "#232936",
+                },
+            });
+
+            candleSeries = chart.addCandlestickSeries({
+                upColor: "#089981",
+                downColor: "#f23645",
+                borderDownColor: "#f23645",
+                borderUpColor: "#089981",
+                wickDownColor: "#f23645",
+                wickUpColor: "#089981",
+            });
+
+            window.addEventListener("resize", () => {
+                chart.applyOptions({ width: container.clientWidth });
+            });
+        } else {
+            document.getElementById("tvchart").innerHTML = "<p style='padding:20px;color:#f23645;'>Error cargando librería gráfica.</p>";
+        }
+
+        // Obtener velas en vivo desde el Worker
+        async function fetchMarketFromWorker() {
+            try {
+                const res = await fetch(`${WORKER_URL}/api/candles`);
+                const data = await res.json();
+                if (!data.ok || !data.candles.length) throw new Error("Sin datos");
+
+                if (candleSeries) candleSeries.setData(data.candles);
+
+                const lastCandle = data.candles[data.candles.length - 1];
+                prevPrice = currentPrice;
+                currentPrice = lastCandle.close;
+
+                const formatted = currentPrice.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                const headerEl = document.getElementById("headerPrice");
+                headerEl.textContent = `${formatted} USD`;
+                headerEl.style.color = currentPrice >= prevPrice ? "#089981" : "#f23645";
+                document.getElementById("panelPrice").textContent = `${formatted} USD`;
+
+                const statusEl = document.getElementById("wsStatus");
+                statusEl.textContent = "● Conectado vía Cloudflare Worker";
+                statusEl.style.color = "#089981";
+
+                updateFloatingPnL();
+                evaluateAI(lastCandle);
+            } catch (err) {
+                const statusEl = document.getElementById("wsStatus");
+                statusEl.textContent = "Configura WORKER_URL en index.html";
+                statusEl.style.color = "#f23645";
+            }
+        }
+
+        // Ejecutar orden y guardarla en D1
+        async function executeTrade(type) {
+            if (currentPrice <= 0) return;
+            const amount = parseFloat(document.getElementById("orderAmount").value);
+            if (isNaN(amount) || amount <= 0 || amount > balance) {
+                alert("Monto inválido o balance demo insuficiente.");
+                return;
+            }
+
+            balance -= amount;
+            openPositions.push({ type, entryPrice: currentPrice, amount });
+
+            document.getElementById("lastExec").textContent = `${new Date().toLocaleTimeString()} (${type})`;
+            document.getElementById("aiSignal").textContent = `Orden ${type} guardada en D1`;
+            updateAccountUI();
+
+            try {
+                await fetch(`${WORKER_URL}/api/trade`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ type, amount, price: currentPrice })
+                });
+                loadHistoryFromD1();
+            } catch (e) {
+                console.error("Error guardando en D1:", e);
+            }
+        }
+
+        // Cargar historial desde D1
+        async function loadHistoryFromD1() {
+            try {
+                const res = await fetch(`${WORKER_URL}/api/history`);
+                const data = await res.json();
+                const tbody = document.getElementById("historyBody");
+                if (!data.ok || !data.rows || data.rows.length === 0) {
+                    tbody.innerHTML = "<tr><td colspan='5' style='color:#788296;'>Sin operaciones registradas en D1 aún.</td></tr>";
+                    return;
+                }
+                tbody.innerHTML = data.rows.map(r => `
+                    <tr>
+                        <td>#${r.id}</td>
+                        <td class="${r.tipo === 'BUY' ? 'text-green' : 'text-red'}"><strong>${r.tipo}</strong></td>
+                        <td>$${Number(r.monto).toFixed(2)}</td>
+                        <td>$${Number(r.precio_entrada).toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
+                        <td>${new Date(r.fecha).toLocaleString()}</td>
+                    </tr>
+                `).join("");
+            } catch (e) {
+                // Silencioso hasta configurar WORKER_URL
+            }
+        }
+
+        function closeAllPositions() {
+            if (!openPositions.length) return;
+            openPositions.forEach(p => {
+                const diff = (currentPrice - p.entryPrice) / p.entryPrice;
+                const pnl = p.type === "BUY" ? p.amount * diff : p.amount * (-diff);
+                balance += p.amount + pnl;
+            });
+            openPositions = [];
+            updateAccountUI();
+            document.getElementById("pnlVal").textContent = "+0.00 USD (0.00%)";
+            document.getElementById("pnlVal").className = "stat-value text-green";
+        }
+
+        function updateFloatingPnL() {
+            if (!openPositions.length) return;
+            let totalPnL = 0;
+            let totalInvested = 0;
+            openPositions.forEach(p => {
+                const diff = (currentPrice - p.entryPrice) / p.entryPrice;
+                totalPnL += p.type === "BUY" ? p.amount * diff : p.amount * (-diff);
+                totalInvested += p.amount;
+            });
+            const pct = totalInvested > 0 ? (totalPnL / totalInvested) * 100 : 0;
+            const sign = totalPnL >= 0 ? "+" : "";
+            const pnlEl = document.getElementById("pnlVal");
+            pnlEl.textContent = `${sign}${totalPnL.toFixed(2)} USD (${sign}${pct.toFixed(2)}%)`;
+            pnlEl.className = `stat-value ${totalPnL >= 0 ? "text-green" : "text-red"}`;
+        }
+
+        function updateAccountUI() {
+            document.getElementById("balanceVal").textContent = `${balance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD`;
+            document.getElementById("openOrdersVal").textContent = openPositions.length;
+        }
+
+        function toggleAIBot() {
+            aiBotActive = !aiBotActive;
+            const btn = document.getElementById("aiBotBtn");
+            btn.textContent = aiBotActive ? "IA Autónomo: ON" : "IA Autónomo: OFF";
+            btn.classList.toggle("active", aiBotActive);
+        }
+
+        function evaluateAI(candle) {
+            const bullish = candle.close >= candle.open;
+            const trendEl = document.getElementById("trendVal");
+            trendEl.textContent = bullish ? "Alcista (Bullish)" : "Bajista (Bearish)";
+            trendEl.style.color = bullish ? "#089981" : "#f23645";
+
+            if (aiBotActive && openPositions.length === 0 && balance >= 200) {
+                document.getElementById("orderAmount").value = 200;
+                executeTrade(bullish ? "BUY" : "SELL");
+            }
+        }
+
+        // Iniciar ciclo de datos
+        fetchMarketFromWorker();
+        loadHistoryFromD1();
+        setInterval(fetchMarketFromWorker, 4000);
+    </script>
+</body>
+</html>
