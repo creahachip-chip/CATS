@@ -14,6 +14,7 @@
             --text-primary: #e1e5ee;
             --text-muted: #788296;
             --accent-cyan: #00d2ff;
+            --accent-gold: #f0b90b;
             --green: #089981;
             --green-hover: #067a67;
             --red: #f23645;
@@ -36,9 +37,8 @@
             overflow-x: hidden;
         }
 
-        /* Sidebar */
         .sidebar {
-            width: 235px;
+            width: 240px;
             background-color: var(--bg-sidebar);
             border-right: 1px solid var(--border-color);
             padding: 20px 14px;
@@ -72,14 +72,7 @@
             color: var(--text-muted);
             font-size: 0.9rem;
             font-weight: 500;
-            cursor: pointer;
             margin-bottom: 6px;
-            transition: all 0.2s;
-        }
-
-        .nav-item:hover {
-            background-color: #1a202c;
-            color: var(--text-primary);
         }
 
         .nav-item.active {
@@ -88,7 +81,34 @@
             border-left: 3px solid var(--accent-cyan);
         }
 
-        /* Main Area */
+        .token-box {
+            margin-top: auto;
+            background-color: var(--bg-panel);
+            border: 1px solid rgba(240, 185, 11, 0.35);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 0.76rem;
+        }
+
+        .token-box strong {
+            color: var(--accent-gold);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .token-box code {
+            display: block;
+            word-break: break-all;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .token-box a {
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
         .main-content {
             flex: 1;
             display: flex;
@@ -103,6 +123,8 @@
             align-items: center;
             padding-bottom: 12px;
             border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .topbar h1 {
@@ -120,7 +142,6 @@
             border: 1px solid rgba(0, 210, 255, 0.3);
         }
 
-        /* Chart Section */
         .chart-card, .panel-box {
             background-color: var(--bg-panel);
             border: 1px solid var(--border-color);
@@ -133,18 +154,31 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 12px;
         }
 
-        .pair-info h2 {
-            font-size: 1.05rem;
-            font-weight: 600;
+        .pair-selector {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
         }
 
-        .pair-info p {
-            font-size: 0.8rem;
+        .pair-btn {
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
             color: var(--text-muted);
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .pair-btn.active {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            background: rgba(240, 185, 11, 0.12);
         }
 
         .live-price-box {
@@ -170,7 +204,6 @@
             overflow: hidden;
         }
 
-        /* Trade Controls Bar */
         .controls-bar {
             display: flex;
             justify-content: space-between;
@@ -180,13 +213,6 @@
             padding-top: 12px;
             border-top: 1px solid var(--border-color);
             margin-top: 10px;
-        }
-
-        .indicators-info {
-            display: flex;
-            gap: 16px;
-            font-size: 0.85rem;
-            color: var(--text-muted);
         }
 
         .trade-buttons {
@@ -213,17 +239,14 @@
             font-size: 0.85rem;
             cursor: pointer;
             color: #fff;
-            transition: opacity 0.2s, transform 0.1s;
         }
 
-        .btn:active { transform: scale(0.98); }
         .btn-buy { background-color: var(--green); }
         .btn-buy:hover { background-color: var(--green-hover); }
         .btn-sell { background-color: var(--red); }
         .btn-sell:hover { background-color: var(--red-hover); }
         .btn-sl { background-color: var(--orange); }
 
-        /* Bottom Grid */
         .bottom-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -259,6 +282,7 @@
         .text-green { color: var(--green); }
         .text-red { color: var(--red); }
         .text-cyan { color: var(--accent-cyan); }
+        .text-gold { color: var(--accent-gold); }
 
         .ai-toggle {
             background-color: #1e2533;
@@ -276,7 +300,6 @@
             color: #0b0e14;
         }
 
-        /* History Table */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -296,8 +319,8 @@
 
         @media (max-width: 860px) {
             body { flex-direction: column; }
-            .sidebar { width: 100%; flex-direction: row; overflow-x: auto; padding: 12px; }
-            .brand { border-bottom: none; margin-bottom: 0; padding-bottom: 0; margin-right: 16px; }
+            .sidebar { width: 100%; }
+            .token-box { margin-top: 12px; }
             .bottom-grid { grid-template-columns: 1fr; }
         }
     </style>
@@ -313,7 +336,14 @@
         <div class="nav-item">Algoritmos IA</div>
         <div class="nav-item">Historial D1</div>
         <div class="nav-item">Mercados</div>
-        <div class="nav-item">Configuración</div>
+
+        <div class="token-box">
+            <strong>TOKEN A1X (BSC)</strong>
+            <code>0x1ad4eea4661d20e16c992237ea0c30a2a06fe045</code>
+            <a href="https://web3.binance.com/es-LA/token/bsc/0x1ad4eea4661d20e16c992237ea0c30a2a06fe045" target="_blank" rel="noopener noreferrer">
+                Ver en Binance Web3 →
+            </a>
+        </div>
     </aside>
 
     <main class="main-content">
@@ -325,8 +355,12 @@
         <section class="chart-card">
             <div class="chart-header">
                 <div class="pair-info">
-                    <h2>BTC / USD - 1 Minute Interval</h2>
-                    <p>Velas en tiempo real vía puente Cloudflare Worker</p>
+                    <h2 id="pairTitle">A1X / USD - BNB Smart Chain (BSC)</h2>
+                    <p id="pairSubtitle">Red A1X integrada • Contrato: 0x1ad4eea4661d20e16c992237ea0c30a2a06fe045</p>
+                    <div class="pair-selector">
+                        <button class="pair-btn active" id="btnA1X" onclick="selectPair('A1X')">A1X (BSC)</button>
+                        <button class="pair-btn" id="btnBTC" onclick="selectPair('BTC')">BTC / USD</button>
+                    </div>
                 </div>
                 <div class="live-price-box">
                     <div class="live-price" id="headerPrice">Cargando...</div>
@@ -337,9 +371,8 @@
             <div id="tvchart"></div>
 
             <div class="controls-bar">
-                <div class="indicators-info">
-                    <span>Tendencia IA: <strong id="trendVal" class="text-cyan">Analizando...</strong></span>
-                    <span>Intervalo: <strong>1m</strong></span>
+                <div style="font-size: 0.85rem; color: #788296;">
+                    Tendencia IA: <strong id="trendVal" class="text-cyan">Analizando...</strong>
                 </div>
 
                 <div class="trade-buttons">
@@ -358,12 +391,12 @@
                     <button class="ai-toggle" id="aiBotBtn" onclick="toggleAIBot()">IA Autónomo: OFF</button>
                 </div>
                 <div class="stat-row">
-                    <span class="stat-label">Precio Actual:</span>
-                    <span class="stat-value" id="panelPrice">-- USD</span>
+                    <span class="stat-label">Activo Seleccionado:</span>
+                    <span class="stat-value text-gold" id="panelPair">A1X (BSC)</span>
                 </div>
                 <div class="stat-row">
-                    <span class="stat-label">Estado IA:</span>
-                    <span class="stat-value text-green" id="aiSignal">En espera</span>
+                    <span class="stat-label">Precio Actual:</span>
+                    <span class="stat-value" id="panelPrice">-- USD</span>
                 </div>
                 <div class="stat-row">
                     <span class="stat-label">Última Ejecución:</span>
@@ -381,7 +414,7 @@
                     <span class="stat-value" id="balanceVal">10,000.00 USD</span>
                 </div>
                 <div class="stat-row">
-                    <span class="stat-label">PnL Flotante (Ganancia/Pérdida):</span>
+                    <span class="stat-label">PnL Flotante:</span>
                     <span class="stat-value text-green" id="pnlVal">+0.00 USD (0.00%)</span>
                 </div>
                 <div class="stat-row">
@@ -391,7 +424,6 @@
             </div>
         </section>
 
-        <!-- Registro de Operaciones D1 -->
         <section class="panel-box">
             <div class="panel-title">
                 <span>Registro de Órdenes (Cloudflare D1)</span>
@@ -401,6 +433,7 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Activo</th>
                         <th>Tipo</th>
                         <th>Monto (USD)</th>
                         <th>Precio Entrada</th>
@@ -409,7 +442,7 @@
                 </thead>
                 <tbody id="historyBody">
                     <tr>
-                        <td colspan="5" style="color: #788296;">Cargando historial desde D1...</td>
+                        <td colspan="6" style="color: #788296;">Cargando historial desde D1...</td>
                     </tr>
                 </tbody>
             </table>
@@ -420,6 +453,8 @@
         // REEMPLAZA ESTA URL POR LA DE TU WORKER (sin barra al final)
         const WORKER_URL = "https://cats-worker.TU-SUBDOMINIO.workers.dev";
 
+        let activePair = "A1X";
+        let activePairLabel = "A1X (BSC)";
         let currentPrice = 0;
         let prevPrice = 0;
         let balance = 10000.00;
@@ -427,7 +462,6 @@
         let aiBotActive = false;
         let chart, candleSeries;
 
-        // Inicializar gráfico Lightweight Charts
         if (typeof LightweightCharts !== "undefined") {
             const container = document.getElementById("tvchart");
             chart = LightweightCharts.createChart(container, {
@@ -439,17 +473,9 @@
                     vertLines: { color: "#1e2433" },
                     horzLines: { color: "#1e2433" },
                 },
-                crosshair: {
-                    mode: LightweightCharts.CrosshairMode.Normal,
-                },
-                timeScale: {
-                    borderColor: "#232936",
-                    timeVisible: true,
-                    secondsVisible: false,
-                },
-                rightPriceScale: {
-                    borderColor: "#232936",
-                },
+                crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+                timeScale: { borderColor: "#232936", timeVisible: true, secondsVisible: false },
+                rightPriceScale: { borderColor: "#232936" },
             });
 
             candleSeries = chart.addCandlestickSeries({
@@ -464,43 +490,66 @@
             window.addEventListener("resize", () => {
                 chart.applyOptions({ width: container.clientWidth });
             });
-        } else {
-            document.getElementById("tvchart").innerHTML = "<p style='padding:20px;color:#f23645;'>Error cargando librería gráfica.</p>";
         }
 
-        // Obtener velas en vivo desde el Worker
+        function selectPair(pair) {
+            activePair = pair;
+            document.getElementById("btnA1X").classList.toggle("active", pair === "A1X");
+            document.getElementById("btnBTC").classList.toggle("active", pair === "BTC");
+
+            if (pair === "A1X") {
+                activePairLabel = "A1X (BSC)";
+                document.getElementById("pairTitle").textContent = "A1X / USD - BNB Smart Chain (BSC)";
+                document.getElementById("pairSubtitle").textContent = "Contrato: 0x1ad4eea4661d20e16c992237ea0c30a2a06fe045";
+                document.getElementById("panelPair").textContent = "A1X (BSC)";
+            } else {
+                activePairLabel = "BTC / USD";
+                document.getElementById("pairTitle").textContent = "BTC / USD - 1 Minute Interval";
+                document.getElementById("pairSubtitle").textContent = "Mercado Spot vía puente Cloudflare Worker";
+                document.getElementById("panelPair").textContent = "BTC / USD";
+            }
+
+            currentPrice = 0;
+            fetchMarketFromWorker();
+        }
+
+        function formatPrice(val) {
+            const decimals = val < 1 ? 6 : 2;
+            return val.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+        }
+
         async function fetchMarketFromWorker() {
             try {
-                const res = await fetch(`${WORKER_URL}/api/candles`);
+                const res = await fetch(`${WORKER_URL}/api/candles?pair=${encodeURIComponent(activePair)}`);
                 const data = await res.json();
                 if (!data.ok || !data.candles.length) throw new Error("Sin datos");
 
+                if (data.pair) activePairLabel = data.pair;
                 if (candleSeries) candleSeries.setData(data.candles);
 
                 const lastCandle = data.candles[data.candles.length - 1];
-                prevPrice = currentPrice;
+                prevPrice = currentPrice || lastCandle.open;
                 currentPrice = lastCandle.close;
 
-                const formatted = currentPrice.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                const formatted = formatPrice(currentPrice);
                 const headerEl = document.getElementById("headerPrice");
                 headerEl.textContent = `${formatted} USD`;
                 headerEl.style.color = currentPrice >= prevPrice ? "#089981" : "#f23645";
                 document.getElementById("panelPrice").textContent = `${formatted} USD`;
 
                 const statusEl = document.getElementById("wsStatus");
-                statusEl.textContent = "● Conectado vía Cloudflare Worker";
+                statusEl.textContent = `● Activo (${activePairLabel})`;
                 statusEl.style.color = "#089981";
 
                 updateFloatingPnL();
                 evaluateAI(lastCandle);
-            } catch (err) {
+            } catch {
                 const statusEl = document.getElementById("wsStatus");
-                statusEl.textContent = "Configura WORKER_URL en index.html";
+                statusEl.textContent = "Revisa WORKER_URL en index.html";
                 statusEl.style.color = "#f23645";
             }
         }
 
-        // Ejecutar orden y guardarla en D1
         async function executeTrade(type) {
             if (currentPrice <= 0) return;
             const amount = parseFloat(document.getElementById("orderAmount").value);
@@ -510,17 +559,20 @@
             }
 
             balance -= amount;
-            openPositions.push({ type, entryPrice: currentPrice, amount });
-
-            document.getElementById("lastExec").textContent = `${new Date().toLocaleTimeString()} (${type})`;
-            document.getElementById("aiSignal").textContent = `Orden ${type} guardada en D1`;
+            openPositions.push({ pair: activePairLabel, type, entryPrice: currentPrice, amount });
+            document.getElementById("lastExec").textContent = `${new Date().toLocaleTimeString()} (${activePair} ${type})`;
             updateAccountUI();
 
             try {
                 await fetch(`${WORKER_URL}/api/trade`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ type, amount, price: currentPrice })
+                    body: JSON.stringify({
+                        type,
+                        par: activePairLabel,
+                        amount,
+                        price: currentPrice
+                    })
                 });
                 loadHistoryFromD1();
             } catch (e) {
@@ -528,26 +580,33 @@
             }
         }
 
-        // Cargar historial desde D1
         async function loadHistoryFromD1() {
             try {
                 const res = await fetch(`${WORKER_URL}/api/history`);
                 const data = await res.json();
+                if (data?.account && typeof data.account.balance === "number") {
+                    const locked = openPositions.reduce((acc, p) => acc + p.amount, 0);
+                    balance = Math.max(0, Number((data.account.balance - locked).toFixed(2)));
+                    updateAccountUI();
+                }
+
                 const tbody = document.getElementById("historyBody");
                 if (!data.ok || !data.rows || data.rows.length === 0) {
-                    tbody.innerHTML = "<tr><td colspan='5' style='color:#788296;'>Sin operaciones registradas en D1 aún.</td></tr>";
+                    tbody.innerHTML = "<tr><td colspan='6' style='color:#788296;'>Sin operaciones registradas en D1 aún.</td></tr>";
                     return;
                 }
+
                 tbody.innerHTML = data.rows.map(r => `
                     <tr>
                         <td>#${r.id}</td>
-                        <td class="${r.tipo === 'BUY' ? 'text-green' : 'text-red'}"><strong>${r.tipo}</strong></td>
+                        <td class="text-gold"><strong>${r.par || "BTC/USD"}</strong></td>
+                        <td class="${r.tipo === "BUY" ? "text-green" : "text-red"}"><strong>${r.tipo}</strong></td>
                         <td>$${Number(r.monto).toFixed(2)}</td>
-                        <td>$${Number(r.precio_entrada).toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
+                        <td>$${formatPrice(Number(r.precio_entrada))}</td>
                         <td>${new Date(r.fecha).toLocaleString()}</td>
                     </tr>
                 `).join("");
-            } catch (e) {
+            } catch {
                 // Silencioso hasta configurar WORKER_URL
             }
         }
@@ -605,10 +664,9 @@
             }
         }
 
-        // Iniciar ciclo de datos
         fetchMarketFromWorker();
         loadHistoryFromD1();
-        setInterval(fetchMarketFromWorker, 4000);
+        setInterval(fetchMarketFromWorker, 5000);
     </script>
 </body>
 </html>
