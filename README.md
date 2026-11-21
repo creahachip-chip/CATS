@@ -19,3 +19,17 @@ Gestión de Cuentas Demo: Sistema de contabilidad virtual que maneja saldos, his
 Interfaz Web Moderna: Gráficos de velas interactivos y paneles de control limpios para visualizar el mercado y el rendimiento del algoritmo.
 
 Arquitectura Serverless: Desplegado en la nube para máxima disponibilidad y escalabilidad.
+
+# Tecnologías y Lenguajes Utilizados
+
+CATS utiliza un stack tecnológico moderno enfocado en el rendimiento y la eficiencia en la nube:
+
+
+Componente	           Tecnología / Lenguaje                    	Función				
+Frontend (Interfaz)	HTML5, CSS3, JavaScript (ES6+)	        Visualización de gráficos, paneles de control y experiencia de usuario.				
+Librería de Gráficos    	Lightweight Charts (TradingView)	Renderizado de velas japonesas e indicadores técnicos de alto rendimiento.				
+Datos de Mercado	      WebSockets / REST APIs	            Recepción de precios en tiempo real desde fuentes públicas.				
+Backend / Lógica	Cloudflare Workers (JavaScript / ES модули)	Motor de simulación, gestión de cuentas, validación de órdenes y seguridad.				
+Base de Datos	Cloudflare D1 (SQLite)	Almacenamiento de historiales de usuario, saldos y logs de operaciones.				
+Infraestructura	GitHub Pages	Alojamiento de la interfaz web estática.				
+						
