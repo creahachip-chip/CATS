@@ -26,16 +26,16 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         body { background-color: var(--bg-main); color: var(--text-primary); display: flex; min-height: 100vh; overflow-x: hidden; }
 
-        .sidebar { width: 240px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); padding: 20px 14px; display: flex; flex-direction: column; flex-shrink: 0; }
+        .sidebar { width: 245px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); padding: 20px 14px; display: flex; flex-direction: column; flex-shrink: 0; }
         .brand { font-size: 1.3rem; font-weight: 800; color: var(--accent-cyan); letter-spacing: 1.5px; padding: 0 10px 22px 10px; border-bottom: 1px solid var(--border-color); margin-bottom: 16px; }
         .brand span { display: block; font-size: 0.7rem; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
         .nav-item { padding: 11px 12px; border-radius: 8px; color: var(--text-muted); font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; }
         .nav-item.active { background-color: rgba(0, 210, 255, 0.12); color: var(--accent-cyan); border-left: 3px solid var(--accent-cyan); }
 
-        .token-box { margin-top: auto; background-color: var(--bg-panel); border: 1px solid rgba(240, 185, 11, 0.35); border-radius: 8px; padding: 12px; font-size: 0.76rem; }
+        .token-box { margin-top: auto; background-color: var(--bg-panel); border: 1px solid rgba(240, 185, 11, 0.35); border-radius: 8px; padding: 12px; font-size: 0.75rem; }
         .token-box strong { color: var(--accent-gold); display: block; margin-bottom: 4px; }
-        .token-box code { display: block; word-break: break-all; color: var(--text-muted); margin-bottom: 8px; }
-        .token-box a { color: var(--accent-gold); text-decoration: none; font-weight: 600; }
+        .token-box code { display: block; word-break: break-all; color: var(--text-muted); margin-bottom: 8px; font-size: 0.71rem; }
+        .token-box a { display: block; color: var(--accent-gold); text-decoration: none; font-weight: 600; margin-top: 4px; }
 
         .main-content { flex: 1; display: flex; flex-direction: column; padding: 18px 24px; gap: 16px; }
         .topbar { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; gap: 10px; }
@@ -105,16 +105,19 @@
             CREAHACHIP
             <span>CAT SYSTEM // AR01</span>
         </div>
-        <div class="nav-item active">Dashboard Trading</div>
+        <div class="nav-item active">Dashboard On-Chain</div>
         <div class="nav-item">B2-IA · Demetra · LIZA</div>
         <div class="nav-item">Historial D1</div>
-        <div class="nav-item">Mercados</div>
+        <div class="nav-item">Pool BSC</div>
 
         <div class="token-box">
-            <strong>TOKEN A1X (BSC)</strong>
-            <code>0x1ad4eea4661d20e16c992237ea0c30a2a06fe045</code>
+            <strong>POOL PANCAKESWAP (BSC)</strong>
+            <code>0x1834762b209fF4fB9c944461895e136fE152a2e8</code>
+            <a href="https://pancake.xyz/liquidity/pool/bsc/0x1834762b209fF4fB9c944461895e136fE152a2e8?chainName=bsc&id=0x1834762b209fF4fB9c944461895e136fE152a2e8&chain=bsc" target="_blank" rel="noopener noreferrer">
+                Abrir Pool PancakeSwap →
+            </a>
             <a href="https://web3.binance.com/es-LA/token/bsc/0x1ad4eea4661d20e16c992237ea0c30a2a06fe045" target="_blank" rel="noopener noreferrer">
-                Ver en Binance Web3 →
+                Token A1X en Binance Web3 →
             </a>
         </div>
     </aside>
@@ -133,18 +136,18 @@
         <section class="chart-card">
             <div class="chart-header">
                 <div class="pair-info">
-                    <h2 id="pairTitle">A1X / USD - BNB Smart Chain (BSC)</h2>
-                    <p id="pairSubtitle">Contrato: 0x1ad4eea4661d20e16c992237ea0c30a2a06fe045</p>
+                    <h2 id="pairTitle">A1X / USD - Pool PancakeSwap BSC (On-Chain)</h2>
+                    <p id="pairSubtitle">Pool: 0x1834762b209fF4fB9c944461895e136fE152a2e8</p>
                     <div class="pair-selector">
-                        <button class="pair-btn active" id="btnA1X" onclick="selectPair('A1X')">A1X (BSC)</button>
+                        <button class="pair-btn active" id="btnA1X" onclick="selectPair('A1X')">A1X (BSC Pool)</button>
                         <button class="pair-btn" id="btnBTC" onclick="selectPair('BTC')">BTC / USD</button>
                         <button class="pair-btn" id="btnETH" onclick="selectPair('ETH')">ETH / USD</button>
                         <button class="pair-btn" id="btnBNB" onclick="selectPair('BNB')">BNB / USD</button>
                     </div>
                 </div>
                 <div class="live-price-box">
-                    <div class="live-price" id="headerPrice">Cargando...</div>
-                    <div class="live-status" id="wsStatus">Conectando a red real...</div>
+                    <div class="live-price" id="headerPrice">Leyendo BSC...</div>
+                    <div class="live-status" id="wsStatus">Conectando a nodo RPC BSC...</div>
                 </div>
             </div>
 
@@ -152,8 +155,8 @@
 
             <div class="controls-bar">
                 <div style="font-size: 0.85rem; color: #788296;">
-                    Precio Activo: <strong id="panelPrice" class="text-cyan">-- USD</strong> •
-                    Última Ejecución: <strong id="lastExec">--:--:--</strong>
+                    Precio On-Chain: <strong id="panelPrice" class="text-cyan">--</strong> •
+                    Bloque BSC: <strong id="bscBlock" class="text-gold">--</strong>
                 </div>
 
                 <div class="trade-buttons">
@@ -169,7 +172,7 @@
         <section class="panel-box">
             <div class="panel-title">
                 <span>Agentes Autónomos (B2-IA · Demetra AI · LIZA AI)</span>
-                <span style="font-size: 0.75rem; color: var(--accent-cyan);">Motor CATS</span>
+                <span style="font-size: 0.75rem; color: var(--accent-cyan);">Motor CATS On-Chain</span>
             </div>
             <div class="agents-grid" id="agentsGrid"></div>
         </section>
@@ -177,19 +180,19 @@
         <section class="bottom-grid">
             <div class="panel-box">
                 <div class="panel-title">
-                    <span>Cuenta y Conexión</span>
-                    <span style="font-size: 0.72rem; color: var(--accent-gold);" id="sourceTag">API</span>
+                    <span>Telemetría Real de Red</span>
+                    <span style="font-size: 0.72rem; color: var(--accent-gold);" id="sourceTag">BSC RPC</span>
                 </div>
                 <div class="stat-row">
                     <span class="stat-label">Cuenta Activa:</span>
                     <span class="stat-value text-cyan" id="activeAccountLabel">AR01-DEMO (Invitado)</span>
                 </div>
                 <div class="stat-row">
-                    <span class="stat-label">Activo Seleccionado:</span>
-                    <span class="stat-value text-gold" id="panelPair">A1X (BSC)</span>
+                    <span class="stat-label">Par Cotizado / Liquidez:</span>
+                    <span class="stat-value text-gold" id="poolLiquidityInfo">--</span>
                 </div>
                 <div class="stat-row">
-                    <span class="stat-label">Última Sincronización:</span>
+                    <span class="stat-label">Última Lectura Real:</span>
                     <span class="stat-value" id="lastSync">--:--:--</span>
                 </div>
             </div>
@@ -245,17 +248,17 @@
         const WORKER_URL = "https://cats-worker.TU-SUBDOMINIO.workers.dev";
 
         const PAIR_META = {
-            A1X: { label: "A1X (BSC)", title: "A1X / USD - BNB Smart Chain (BSC)", sub: "Contrato: 0x1ad4eea4661d20e16c992237ea0c30a2a06fe045" },
-            BTC: { label: "BTC / USD", title: "BTC / USD - Mercado Real", sub: "Cotización real vía puente Cloudflare Worker" },
-            ETH: { label: "ETH / USD", title: "ETH / USD - Mercado Real", sub: "Cotización real vía puente Cloudflare Worker" },
-            BNB: { label: "BNB / USD", title: "BNB / USD - Mercado Real", sub: "Cotización real vía puente Cloudflare Worker" },
+            A1X: { label: "A1X / USD (BSC)", title: "A1X / USD - Pool PancakeSwap BSC (On-Chain)", sub: "Pool: 0x1834762b209fF4fB9c944461895e136fE152a2e8" },
+            BTC: { label: "BTC / USD", title: "BTC / USD - Mercado Real", sub: "Cotización real Coinbase Spot vía Cloudflare Worker" },
+            ETH: { label: "ETH / USD", title: "ETH / USD - Mercado Real", sub: "Cotización real Coinbase Spot vía Cloudflare Worker" },
+            BNB: { label: "BNB / USD", title: "BNB / USD - Mercado Real", sub: "Cotización real Coinbase Spot vía Cloudflare Worker" },
         };
 
         const AGENTS = [
             {
                 id: "B2-IA",
                 name: "B2-IA",
-                role: "Ejecución Dinámica",
+                role: "Ejecución Pool A1X",
                 targetPair: "A1X",
                 sizeUsd: 250,
                 active: false,
@@ -265,7 +268,7 @@
             {
                 id: "Demetra AI",
                 name: "Demetra AI",
-                role: "Crecimiento y Tendencia",
+                role: "Tendencia BTC",
                 targetPair: "BTC",
                 sizeUsd: 200,
                 active: false,
@@ -275,7 +278,7 @@
             {
                 id: "LIZA AI",
                 name: "LIZA AI",
-                role: "Precisión y Control",
+                role: "Precisión ETH",
                 targetPair: "ETH",
                 sizeUsd: 150,
                 active: false,
@@ -372,9 +375,6 @@
             window.addEventListener("resize", () => {
                 chart.applyOptions({ width: container.clientWidth });
             });
-        } else {
-            document.getElementById("tvchart").innerHTML =
-                "<p style='padding:20px;color:#f23645;'>No cargó la librería de gráficos en tu red; el panel numérico y los 3 agentes siguen activos.</p>";
         }
 
         function renderAgents() {
@@ -395,7 +395,7 @@
 
         function toggleAgent(index) {
             AGENTS[index].active = !AGENTS[index].active;
-            AGENTS[index].signal = AGENTS[index].active ? "Analizando mercado..." : "Pausado";
+            AGENTS[index].signal = AGENTS[index].active ? "Leyendo bloque real..." : "Pausado";
             renderAgents();
             if (AGENTS[index].active && lastCandle) {
                 evaluateAgents(lastCandle);
@@ -430,14 +430,14 @@
             activePairLabel = meta.label;
             document.getElementById("pairTitle").textContent = meta.title;
             document.getElementById("pairSubtitle").textContent = meta.sub;
-            document.getElementById("panelPair").textContent = meta.label;
             currentPrice = 0;
             lastCandle = null;
             fetchMarketFromWorker();
         }
 
         function formatPrice(val) {
-            const decimals = val < 1 ? 6 : 2;
+            if (!Number.isFinite(val)) return "--";
+            const decimals = val < 0.01 ? 8 : val < 1 ? 6 : 2;
             return val.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
         }
 
@@ -446,33 +446,42 @@
                 const res = await fetch(`${WORKER_URL}/api/candles?pair=${encodeURIComponent(activePair)}`);
                 const data = await res.json();
                 if (!data.ok || !Array.isArray(data.candles) || !data.candles.length) {
-                    throw new Error("Sin datos");
+                    throw new Error(data.error || "Sin datos del pool");
                 }
 
                 if (data.pair) activePairLabel = data.pair;
-                if (data.source) document.getElementById("sourceTag").textContent = data.source.toUpperCase();
+                if (data.source) document.getElementById("sourceTag").textContent = data.source;
+                if (data.blockNumber) document.getElementById("bscBlock").textContent = `#${data.blockNumber}`;
+                if (data.quoteSymbol) {
+                    document.getElementById("poolLiquidityInfo").textContent =
+                        `${data.quoteSymbol} · Liq: ${data.liquidityRaw || "Activa"}`;
+                } else {
+                    document.getElementById("poolLiquidityInfo").textContent = data.pair;
+                }
+
                 if (candleSeries) candleSeries.setData(data.candles);
 
                 lastCandle = { ...data.candles[data.candles.length - 1] };
                 prevPrice = currentPrice || lastCandle.open;
                 currentPrice = lastCandle.close;
 
+                const unit = data.unit || "USD";
                 const formatted = formatPrice(currentPrice);
                 const headerEl = document.getElementById("headerPrice");
-                headerEl.textContent = `${formatted} USD`;
+                headerEl.textContent = `${formatted} ${unit}`;
                 headerEl.style.color = currentPrice >= prevPrice ? "#089981" : "#f23645";
-                document.getElementById("panelPrice").textContent = `${formatted} USD`;
+                document.getElementById("panelPrice").textContent = `${formatted} ${unit}`;
 
                 const statusEl = document.getElementById("wsStatus");
-                statusEl.textContent = `● Conectado (${activePairLabel})`;
+                statusEl.textContent = `● On-Chain Real (${activePairLabel})`;
                 statusEl.style.color = "#089981";
                 document.getElementById("lastSync").textContent = new Date().toLocaleTimeString();
 
                 updateFloatingPnL();
                 evaluateAgents(lastCandle);
-            } catch {
+            } catch (err) {
                 const statusEl = document.getElementById("wsStatus");
-                statusEl.textContent = "Revisa WORKER_URL o conexión";
+                statusEl.textContent = err.message || "Error leyendo red real";
                 statusEl.style.color = "#f23645";
             }
         }
@@ -487,7 +496,6 @@
 
             balance -= amount;
             openPositions.push({ pair: activePairLabel, type, entryPrice: currentPrice, amount, agent: agentSource });
-            document.getElementById("lastExec").textContent = `${new Date().toLocaleTimeString()} · ${agentSource} (${type})`;
             updateAccountUI();
 
             try {
@@ -528,11 +536,11 @@
                 tbody.innerHTML = data.rows.map((r) => `
                     <tr>
                         <td>#${r.id}</td>
-                        <td class="text-gold"><strong>${r.par || "A1X (BSC)"}</strong></td>
+                        <td class="text-gold"><strong>${r.par || "A1X / USD (BSC)"}</strong></td>
                         <td class="text-cyan"><strong>${r.agente || "MANUAL"}</strong></td>
                         <td class="${r.tipo === "BUY" ? "text-green" : "text-red"}"><strong>${r.tipo}</strong></td>
                         <td>$${Number(r.monto).toFixed(2)}</td>
-                        <td>$${formatPrice(Number(r.precio_entrada))}</td>
+                        <td>${formatPrice(Number(r.precio_entrada))}</td>
                         <td>${new Date(r.fecha).toLocaleString()}</td>
                     </tr>
                 `).join("");
