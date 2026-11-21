@@ -20,16 +20,41 @@ Interfaz Web Moderna: Gráficos de velas interactivos y paneles de control limpi
 
 Arquitectura Serverless: Desplegado en la nube para máxima disponibilidad y escalabilidad.
 
-# Tecnologías y Lenguajes Utilizados
+## Tecnologías y Lenguajes Utilizados
 
-CATS utiliza un stack tecnológico moderno enfocado en el rendimiento y la eficiencia en la nube:
+| Componente | Tecnología / Lenguaje | Función |
+| :--- | :--- | :--- |
+| **Frontend (Interfaz)** | HTML5, CSS3, JavaScript (ES6+) | Interfaz del simulador, controles de orden y panel de cuenta |
+| **Gráficos** | TradingView Lightweight Charts | Renderizado de velas japonesas e indicadores en el navegador |
+| **Datos en Vivo** | WebSockets / REST APIs | Recepción de cotizaciones y velas desde fuentes públicas |
+| **Backend / API** | Cloudflare Workers (JavaScript) | Validación de órdenes demo, cálculo de PnL y lógica de negocio |
+| **Base de Datos** | Cloudflare D1 (SQLite) | Almacenamiento de cuentas demo, historial y registros de operaciones |
+| **Hosting Estático** | GitHub Pages | Publicación y entrega de los archivos frontend |
 
+## Estructura del Repositorio
 
-Componente	           Tecnología / Lenguaje                    	Función				
-Frontend (Interfaz)	HTML5, CSS3, JavaScript (ES6+)	        Visualización de gráficos, paneles de control y experiencia de usuario.				
-Librería de Gráficos    	Lightweight Charts (TradingView)	Renderizado de velas japonesas e indicadores técnicos de alto rendimiento.				
-Datos de Mercado	      WebSockets / REST APIs	            Recepción de precios en tiempo real desde fuentes públicas.				
-Backend / Lógica	Cloudflare Workers (JavaScript / ES модули)	Motor de simulación, gestión de cuentas, validación de órdenes y seguridad.				
-Base de Datos	Cloudflare D1 (SQLite)	Almacenamiento de historiales de usuario, saldos y logs de operaciones.				
-Infraestructura	GitHub Pages	Alojamiento de la interfaz web estática.				
-						
+```text
+CATS/
+├── index.html
+├── style.css
+├── app.js
+├── README.md
+└── assets/
+```
+
+## Primeros Pasos
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone https://github.com/TU_USUARIO/CreahachipAutomatedTradingSystem.git
+   ```
+2. **Ejecutar el frontend:**
+   Abre `index.html` en tu navegador o publícalo mediante **GitHub Pages**.
+3. **Conectar el backend:**
+   Despliega tu **Cloudflare Worker** vinculado a tu base de datos **D1** y apunta la URL de tu API desde `app.js`.
+
+## Licencia
+
+Este proyecto se distribuye bajo licencia MIT. Consulta el archivo `LICENSE` para más detalles.
+
+2026   prohibido copiar sin permiso del administrador 
