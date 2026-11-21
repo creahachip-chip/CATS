@@ -160,6 +160,7 @@
 
         .pair-selector {
             display: flex;
+            flex-wrap: wrap;
             gap: 8px;
             margin-top: 8px;
         }
@@ -356,10 +357,12 @@
             <div class="chart-header">
                 <div class="pair-info">
                     <h2 id="pairTitle">A1X / USD - BNB Smart Chain (BSC)</h2>
-                    <p id="pairSubtitle">Red A1X integrada • Contrato: 0x1ad4eea4661d20e16c992237ea0c30a2a06fe045</p>
+                    <p id="pairSubtitle">Contrato: 0x1ad4eea4661d20e16c992237ea0c30a2a06fe045</p>
                     <div class="pair-selector">
                         <button class="pair-btn active" id="btnA1X" onclick="selectPair('A1X')">A1X (BSC)</button>
                         <button class="pair-btn" id="btnBTC" onclick="selectPair('BTC')">BTC / USD</button>
+                        <button class="pair-btn" id="btnETH" onclick="selectPair('ETH')">ETH / USD</button>
+                        <button class="pair-btn" id="btnBNB" onclick="selectPair('BNB')">BNB / USD</button>
                     </div>
                 </div>
                 <div class="live-price-box">
@@ -453,8 +456,16 @@
         // REEMPLAZA ESTA URL POR LA DE TU WORKER (sin barra al final)
         const WORKER_URL = "https://cats-worker.TU-SUBDOMINIO.workers.dev";
 
+        const PAIR_META = {
+            A1X: { label: "A1X (BSC)", title: "A1X / USD - BNB Smart Chain (BSC)", sub: "Contrato: 0x1ad4eea4661d20e16c992237ea0c30a2a06fe045" },
+            BTC: { label: "BTC / USD", title: "BTC / USD - 1 Minute Interval", sub: "Mercado Cripto vía puente Cloudflare Worker" },
+            ETH: { label: "ETH / USD", title: "ETH / USD - 1 Minute Interval", sub: "Mercado Cripto vía puente Cloudflare Worker" },
+            BNB: { label: "BNB / USD", title: "BNB / USD - 1 Minute Interval", sub: "Mercado Cripto vía puente Cloudflare Worker" },
+        };
+
         let activePair = "A1X";
-        let activePairLabel = "A1X (BSC)";
+        let activePairLabel = PAIR_META.A1X.label;
+        let lastCandle = null;
         let currentPrice = 0;
         let prevPrice = 0;
         let balance = 10000.00;
@@ -465,14 +476,8 @@
         if (typeof LightweightCharts !== "undefined") {
             const container = document.getElementById("tvchart");
             chart = LightweightCharts.createChart(container, {
-                layout: {
-                    background: { color: "#131722" },
-                    textColor: "#9aa4b8",
-                },
-                grid: {
-                    vertLines: { color: "#1e2433" },
-                    horzLines: { color: "#1e2433" },
-                },
+                layout: { background: { color: "#131722" }, textColor: "#9aa4b8" },
+                grid: { vertLines: { color: "#1e2433" }, horzLines: { color: "#1e2433" } },
                 crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
                 timeScale: { borderColor: "#232936", timeVisible: true, secondsVisible: false },
                 rightPriceScale: { borderColor: "#232936" },
@@ -490,26 +495,25 @@
             window.addEventListener("resize", () => {
                 chart.applyOptions({ width: container.clientWidth });
             });
+        } else {
+            document.getElementById("tvchart").innerHTML =
+                "<p style='padding:20px;color:#f23645;'>No cargó la librería de gráficos en tu red; el panel numérico sigue activo.</p>";
         }
 
         function selectPair(pair) {
             activePair = pair;
-            document.getElementById("btnA1X").classList.toggle("active", pair === "A1X");
-            document.getElementById("btnBTC").classList.toggle("active", pair === "BTC");
+            ["A1X", "BTC", "ETH", "BNB"].forEach((k) => {
+                const btn = document.getElementById("btn" + k);
+                if (btn) btn.classList.toggle("active", k === pair);
+            });
 
-            if (pair === "A1X") {
-                activePairLabel = "A1X (BSC)";
-                document.getElementById("pairTitle").textContent = "A1X / USD - BNB Smart Chain (BSC)";
-                document.getElementById("pairSubtitle").textContent = "Contrato: 0x1ad4eea4661d20e16c992237ea0c30a2a06fe045";
-                document.getElementById("panelPair").textContent = "A1X (BSC)";
-            } else {
-                activePairLabel = "BTC / USD";
-                document.getElementById("pairTitle").textContent = "BTC / USD - 1 Minute Interval";
-                document.getElementById("pairSubtitle").textContent = "Mercado Spot vía puente Cloudflare Worker";
-                document.getElementById("panelPair").textContent = "BTC / USD";
-            }
-
+            const meta = PAIR_META[pair] || PAIR_META.BTC;
+            activePairLabel = meta.label;
+            document.getElementById("pairTitle").textContent = meta.title;
+            document.getElementById("pairSubtitle").textContent = meta.sub;
+            document.getElementById("panelPair").textContent = meta.label;
             currentPrice = 0;
+            lastCandle = null;
             fetchMarketFromWorker();
         }
 
@@ -518,36 +522,60 @@
             return val.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
         }
 
+        function applyPriceTick(newPrice, candleObj) {
+            prevPrice = currentPrice || newPrice;
+            currentPrice = newPrice;
+
+            const formatted = formatPrice(currentPrice);
+            const headerEl = document.getElementById("headerPrice");
+            headerEl.textContent = `${formatted} USD`;
+            headerEl.style.color = currentPrice >= prevPrice ? "#089981" : "#f23645";
+            document.getElementById("panelPrice").textContent = `${formatted} USD`;
+
+            if (candleSeries && candleObj) {
+                candleSeries.update(candleObj);
+            }
+
+            updateFloatingPnL();
+            if (candleObj) evaluateAI(candleObj);
+        }
+
         async function fetchMarketFromWorker() {
             try {
                 const res = await fetch(`${WORKER_URL}/api/candles?pair=${encodeURIComponent(activePair)}`);
                 const data = await res.json();
-                if (!data.ok || !data.candles.length) throw new Error("Sin datos");
+                if (!data.ok || !Array.isArray(data.candles) || !data.candles.length) {
+                    throw new Error("Sin datos");
+                }
 
                 if (data.pair) activePairLabel = data.pair;
                 if (candleSeries) candleSeries.setData(data.candles);
 
-                const lastCandle = data.candles[data.candles.length - 1];
-                prevPrice = currentPrice || lastCandle.open;
-                currentPrice = lastCandle.close;
-
-                const formatted = formatPrice(currentPrice);
-                const headerEl = document.getElementById("headerPrice");
-                headerEl.textContent = `${formatted} USD`;
-                headerEl.style.color = currentPrice >= prevPrice ? "#089981" : "#f23645";
-                document.getElementById("panelPrice").textContent = `${formatted} USD`;
+                lastCandle = { ...data.candles[data.candles.length - 1] };
+                applyPriceTick(lastCandle.close, lastCandle);
 
                 const statusEl = document.getElementById("wsStatus");
                 statusEl.textContent = `● Activo (${activePairLabel})`;
                 statusEl.style.color = "#089981";
-
-                updateFloatingPnL();
-                evaluateAI(lastCandle);
             } catch {
                 const statusEl = document.getElementById("wsStatus");
-                statusEl.textContent = "Revisa WORKER_URL en index.html";
+                statusEl.textContent = "Revisa WORKER_URL o conexión";
                 statusEl.style.color = "#f23645";
             }
+        }
+
+        // Movimiento continuo entre consultas al Worker para evitar pantalla estática
+        function liveTickLoop() {
+            if (!lastCandle || currentPrice <= 0) return;
+            const jitter = (Math.random() - 0.495) * 0.0018;
+            const nextClose = Math.max(0.000001, Number((currentPrice * (1 + jitter)).toFixed(6)));
+            lastCandle = {
+                ...lastCandle,
+                close: nextClose,
+                high: Math.max(lastCandle.high, nextClose),
+                low: Math.min(lastCandle.low, nextClose),
+            };
+            applyPriceTick(nextClose, lastCandle);
         }
 
         async function executeTrade(type) {
@@ -571,8 +599,8 @@
                         type,
                         par: activePairLabel,
                         amount,
-                        price: currentPrice
-                    })
+                        price: currentPrice,
+                    }),
                 });
                 loadHistoryFromD1();
             } catch (e) {
@@ -596,10 +624,10 @@
                     return;
                 }
 
-                tbody.innerHTML = data.rows.map(r => `
+                tbody.innerHTML = data.rows.map((r) => `
                     <tr>
                         <td>#${r.id}</td>
-                        <td class="text-gold"><strong>${r.par || "BTC/USD"}</strong></td>
+                        <td class="text-gold"><strong>${r.par || "A1X (BSC)"}</strong></td>
                         <td class="${r.tipo === "BUY" ? "text-green" : "text-red"}"><strong>${r.tipo}</strong></td>
                         <td>$${Number(r.monto).toFixed(2)}</td>
                         <td>$${formatPrice(Number(r.precio_entrada))}</td>
@@ -613,7 +641,7 @@
 
         function closeAllPositions() {
             if (!openPositions.length) return;
-            openPositions.forEach(p => {
+            openPositions.forEach((p) => {
                 const diff = (currentPrice - p.entryPrice) / p.entryPrice;
                 const pnl = p.type === "BUY" ? p.amount * diff : p.amount * (-diff);
                 balance += p.amount + pnl;
@@ -628,7 +656,7 @@
             if (!openPositions.length) return;
             let totalPnL = 0;
             let totalInvested = 0;
-            openPositions.forEach(p => {
+            openPositions.forEach((p) => {
                 const diff = (currentPrice - p.entryPrice) / p.entryPrice;
                 totalPnL += p.type === "BUY" ? p.amount * diff : p.amount * (-diff);
                 totalInvested += p.amount;
@@ -666,7 +694,8 @@
 
         fetchMarketFromWorker();
         loadHistoryFromD1();
-        setInterval(fetchMarketFromWorker, 5000);
+        setInterval(fetchMarketFromWorker, 6000);
+        setInterval(liveTickLoop, 2000);
     </script>
 </body>
 </html>
