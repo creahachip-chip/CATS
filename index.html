@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CAT - Creahachip Automated Trading System</title>
-    <!-- TradingView Lightweight Charts -->
-    <script src="https://unpkg.com/lightweight-charts@4.1.1/dist/lightweight-charts.standalone.production.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.1/dist/lightweight-charts.standalone.production.js"></script>
     <style>
         :root {
             --bg-main: #0b0e14;
@@ -26,7 +25,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
         body {
@@ -39,7 +38,7 @@
 
         /* Sidebar */
         .sidebar {
-            width: 240px;
+            width: 235px;
             background-color: var(--bg-sidebar);
             border-right: 1px solid var(--border-color);
             padding: 20px 14px;
@@ -53,7 +52,7 @@
             font-weight: 800;
             color: var(--accent-cyan);
             letter-spacing: 1.5px;
-            padding: 0 10px 24px 10px;
+            padding: 0 10px 22px 10px;
             border-bottom: 1px solid var(--border-color);
             margin-bottom: 16px;
         }
@@ -76,9 +75,6 @@
             cursor: pointer;
             margin-bottom: 6px;
             transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
         .nav-item:hover {
@@ -101,7 +97,6 @@
             gap: 16px;
         }
 
-        /* Header */
         .topbar {
             display: flex;
             justify-content: space-between;
@@ -111,9 +106,8 @@
         }
 
         .topbar h1 {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 700;
-            letter-spacing: 0.4px;
         }
 
         .badge-demo {
@@ -127,14 +121,11 @@
         }
 
         /* Chart Section */
-        .chart-card {
+        .chart-card, .panel-box {
             background-color: var(--bg-panel);
             border: 1px solid var(--border-color);
             border-radius: 10px;
             padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
         }
 
         .chart-header {
@@ -143,6 +134,7 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 10px;
+            margin-bottom: 12px;
         }
 
         .pair-info h2 {
@@ -167,7 +159,7 @@
         }
 
         .live-status {
-            font-size: 0.75rem;
+            font-size: 0.78rem;
             color: var(--text-muted);
         }
 
@@ -185,8 +177,9 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 12px;
-            padding-top: 10px;
+            padding-top: 12px;
             border-top: 1px solid var(--border-color);
+            margin-top: 10px;
         }
 
         .indicators-info {
@@ -194,10 +187,6 @@
             gap: 16px;
             font-size: 0.85rem;
             color: var(--text-muted);
-        }
-
-        .indicators-info strong {
-            color: var(--text-primary);
         }
 
         .trade-buttons {
@@ -224,34 +213,21 @@
             font-size: 0.85rem;
             cursor: pointer;
             color: #fff;
-            transition: background 0.2s, transform 0.1s;
+            transition: opacity 0.2s, transform 0.1s;
         }
 
-        .btn:active {
-            transform: scale(0.98);
-        }
-
+        .btn:active { transform: scale(0.98); }
         .btn-buy { background-color: var(--green); }
         .btn-buy:hover { background-color: var(--green-hover); }
-
         .btn-sell { background-color: var(--red); }
         .btn-sell:hover { background-color: var(--red-hover); }
-
         .btn-sl { background-color: var(--orange); }
-        .btn-sl:hover { opacity: 0.9; }
 
-        /* Bottom Panels */
+        /* Bottom Grid */
         .bottom-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
-        }
-
-        .panel-box {
-            background-color: var(--bg-panel);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 16px;
         }
 
         .panel-title {
@@ -273,12 +249,99 @@
             justify-content: space-between;
             padding: 7px 0;
             font-size: 0.9rem;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
         }
 
-        .stat-row:last-child {
-            border-bottom: none;
+        .stat-row:last-child { border-bottom: none; }
+        .stat-label { color: var(--text-muted); }
+        .stat-value { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+        .text-green { color: var(--green); }
+        .text-red { color: var(--red); }
+        .text-cyan { color: var(--accent-cyan); }
+
+        .ai-toggle {
+            background-color: #1e2533;
+            color: var(--accent-cyan);
+            border: 1px solid var(--accent-cyan);
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            font-weight: 600;
         }
 
-        .stat-label {
-            color:
+        .ai-toggle.active {
+            background-color: var(--accent-cyan);
+            color: #0b0e14;
+        }
+
+        /* History Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 9px 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        @media (max-width: 860px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; flex-direction: row; overflow-x: auto; padding: 12px; }
+            .brand { border-bottom: none; margin-bottom: 0; padding-bottom: 0; margin-right: 16px; }
+            .bottom-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="brand">
+            CREAHACHIP
+            <span>CAT SYSTEM // AR01</span>
+        </div>
+        <div class="nav-item active">Dashboard Trading</div>
+        <div class="nav-item">Algoritmos IA</div>
+        <div class="nav-item">Historial D1</div>
+        <div class="nav-item">Mercados</div>
+        <div class="nav-item">Configuración</div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <h1>CAT - CREAHACHIP AUTOMATED TRADING</h1>
+            <span class="badge-demo">Cloudflare Pages + Worker + D1</span>
+        </header>
+
+        <section class="chart-card">
+            <div class="chart-header">
+                <div class="pair-info">
+                    <h2>BTC / USD - 1 Minute Interval</h2>
+                    <p>Velas en tiempo real vía puente Cloudflare Worker</p>
+                </div>
+                <div class="live-price-box">
+                    <div class="live-price" id="headerPrice">Cargando...</div>
+                    <div class="live-status" id="wsStatus">Conectando con Worker...</div>
+                </div>
+            </div>
+
+            <div id="tvchart"></div>
+
+            <div class="controls-bar">
+                <div class="indicators-info">
+                    <span>Tendencia IA: <strong id="trendVal" class="text-cyan">Analizando...</strong></span>
+                    <span>Intervalo: <strong>1m</strong></span>
+                </div>
+
+                <div class="trade-buttons">
+                    <input type="number" id="orderAmount" class="trade-amount" value="500" min="10" step="10" title="Monto en USD">
+                    <button class="btn btn-buy" onclick="execute
